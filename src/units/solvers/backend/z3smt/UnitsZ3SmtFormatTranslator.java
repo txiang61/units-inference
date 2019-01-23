@@ -92,7 +92,7 @@ public class UnitsZ3SmtFormatTranslator
     @Override
     protected Z3InferenceUnit serializeSlot(Slot slot) {
         if (slot.isConstant()) {
-            throw new BugInCF("don't serialize constant slots here");
+            throw new BugInCF("don't serialize constant slots here, use serializeConstantSlot()");
         }
 
         int slotID = slot.getId();
