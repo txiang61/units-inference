@@ -1,11 +1,13 @@
 package backend.z3smt;
 
-import checkers.inference.model.CombVariableSlot;
+import checkers.inference.model.ArithmeticVariableSlot;
 import checkers.inference.model.ConstantSlot;
 import checkers.inference.model.ExistentialVariableSlot;
-import checkers.inference.model.LubVariableSlot;
+import checkers.inference.model.LUBVariableSlot;
+import checkers.inference.model.PolyInvokeVariableSlot;
 import checkers.inference.model.RefinementVariableSlot;
 import checkers.inference.model.Slot;
+import checkers.inference.model.VPAVariableSlot;
 import checkers.inference.model.VariableSlot;
 import checkers.inference.solver.backend.AbstractFormatTranslator;
 import checkers.inference.solver.frontend.Lattice;
@@ -37,13 +39,13 @@ public abstract class Z3SmtFormatTranslator<SlotEncodingT, SlotSolutionT>
         finishInitializingEncoders();
     }
 
-    protected abstract SlotEncodingT serializeVarSlot(VariableSlot slot);
+    protected abstract SlotEncodingT serializeSlot(Slot slot);
 
     protected abstract SlotEncodingT serializeConstantSlot(ConstantSlot slot);
 
     @Override
     public SlotEncodingT serialize(VariableSlot slot) {
-        return serializeVarSlot(slot);
+        return serializeSlot(slot);
     }
 
     @Override
@@ -53,22 +55,32 @@ public abstract class Z3SmtFormatTranslator<SlotEncodingT, SlotSolutionT>
 
     @Override
     public SlotEncodingT serialize(ExistentialVariableSlot slot) {
-        return serializeVarSlot(slot);
+        return serializeSlot(slot);
     }
 
     @Override
     public SlotEncodingT serialize(RefinementVariableSlot slot) {
-        return serializeVarSlot(slot);
+        return serializeSlot(slot);
     }
 
     @Override
-    public SlotEncodingT serialize(CombVariableSlot slot) {
-        return serializeVarSlot(slot);
+    public SlotEncodingT serialize(VPAVariableSlot slot) {
+        return serializeSlot(slot);
     }
 
     @Override
-    public SlotEncodingT serialize(LubVariableSlot slot) {
-        return serializeVarSlot(slot);
+    public SlotEncodingT serialize(LUBVariableSlot slot) {
+        return serializeSlot(slot);
+    }
+
+    @Override
+    public SlotEncodingT serialize(ArithmeticVariableSlot slot) {
+        return serializeSlot(slot);
+    }
+
+    @Override
+    public SlotEncodingT serialize(PolyInvokeVariableSlot slot) {
+        return serializeSlot(slot);
     }
 
     /**
@@ -77,11 +89,11 @@ public abstract class Z3SmtFormatTranslator<SlotEncodingT, SlotSolutionT>
      */
     public void preAnalyzeSlots(Collection<Slot> slots) {}
 
-    public abstract String generateZ3SlotDeclaration(VariableSlot slot);
+    public abstract String generateZ3SlotDeclaration(Slot slot);
 
-    public abstract BoolExpr encodeSlotWellformnessConstraint(VariableSlot slot);
+    public abstract BoolExpr encodeSlotWellformnessConstraint(Slot slot);
 
-    public abstract BoolExpr encodeSlotPreferenceConstraint(VariableSlot slot);
+    public abstract BoolExpr encodeSlotPreferenceConstraint(Slot slot);
 
     public abstract Map<Integer, AnnotationMirror> decodeSolution(
             List<String> model, ProcessingEnvironment processingEnv);

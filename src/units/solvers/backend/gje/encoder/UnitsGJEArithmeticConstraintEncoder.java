@@ -4,7 +4,6 @@ import checkers.inference.model.ArithmeticConstraint.ArithmeticOperationKind;
 import checkers.inference.model.ArithmeticVariableSlot;
 import checkers.inference.model.ConstantSlot;
 import checkers.inference.model.Slot;
-import checkers.inference.model.VariableSlot;
 import checkers.inference.solver.backend.encoder.ArithmeticConstraintEncoder;
 import checkers.inference.solver.frontend.Lattice;
 import org.checkerframework.javacutil.BugInCF;
@@ -69,8 +68,8 @@ public class UnitsGJEArithmeticConstraintEncoder extends UnitsGJEAbstractConstra
     @Override
     public GJEEquationSet encodeVariable_Variable(
             ArithmeticOperationKind operation,
-            VariableSlot leftOperand,
-            VariableSlot rightOperand,
+            Slot leftOperand,
+            Slot rightOperand,
             ArithmeticVariableSlot result) {
         return encode(operation, leftOperand, rightOperand, result);
     }
@@ -78,7 +77,7 @@ public class UnitsGJEArithmeticConstraintEncoder extends UnitsGJEAbstractConstra
     @Override
     public GJEEquationSet encodeVariable_Constant(
             ArithmeticOperationKind operation,
-            VariableSlot leftOperand,
+            Slot leftOperand,
             ConstantSlot rightOperand,
             ArithmeticVariableSlot result) {
         return encode(operation, leftOperand, rightOperand, result);
@@ -88,7 +87,7 @@ public class UnitsGJEArithmeticConstraintEncoder extends UnitsGJEAbstractConstra
     public GJEEquationSet encodeConstant_Variable(
             ArithmeticOperationKind operation,
             ConstantSlot leftOperand,
-            VariableSlot rightOperand,
+            Slot rightOperand,
             ArithmeticVariableSlot result) {
         return encode(operation, leftOperand, rightOperand, result);
     }
@@ -105,7 +104,7 @@ public class UnitsGJEArithmeticConstraintEncoder extends UnitsGJEAbstractConstra
                 // if leftOperand == rightOperand, then encode equality between
                 // rightOperand and result
                 return UnitsTypecheckUtils.unitsEqual(
-                                leftOperand.getValue(), rightOperand.getValue())
+                                leftOperand.getAnnotation(), rightOperand.getAnnotation())
                         ? UnitsGJEEncoderUtils.equality(
                                 rightOperand.serialize(formatTranslator),
                                 result.serialize(formatTranslator))

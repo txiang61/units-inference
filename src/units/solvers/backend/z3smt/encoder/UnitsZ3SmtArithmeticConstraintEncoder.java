@@ -6,7 +6,6 @@ import checkers.inference.model.ArithmeticConstraint.ArithmeticOperationKind;
 import checkers.inference.model.ArithmeticVariableSlot;
 import checkers.inference.model.ConstantSlot;
 import checkers.inference.model.Slot;
-import checkers.inference.model.VariableSlot;
 import checkers.inference.solver.backend.encoder.ArithmeticConstraintEncoder;
 import checkers.inference.solver.frontend.Lattice;
 import com.microsoft.z3.BoolExpr;
@@ -92,8 +91,8 @@ public class UnitsZ3SmtArithmeticConstraintEncoder
     @Override
     public BoolExpr encodeVariable_Variable(
             ArithmeticOperationKind operation,
-            VariableSlot leftOperand,
-            VariableSlot rightOperand,
+            Slot leftOperand,
+            Slot rightOperand,
             ArithmeticVariableSlot result) {
         return encode(operation, leftOperand, rightOperand, result);
     }
@@ -101,7 +100,7 @@ public class UnitsZ3SmtArithmeticConstraintEncoder
     @Override
     public BoolExpr encodeVariable_Constant(
             ArithmeticOperationKind operation,
-            VariableSlot leftOperand,
+            Slot leftOperand,
             ConstantSlot rightOperand,
             ArithmeticVariableSlot result) {
         return encode(operation, leftOperand, rightOperand, result);
@@ -111,7 +110,7 @@ public class UnitsZ3SmtArithmeticConstraintEncoder
     public BoolExpr encodeConstant_Variable(
             ArithmeticOperationKind operation,
             ConstantSlot leftOperand,
-            VariableSlot rightOperand,
+            Slot rightOperand,
             ArithmeticVariableSlot result) {
         return encode(operation, leftOperand, rightOperand, result);
     }
@@ -131,7 +130,7 @@ public class UnitsZ3SmtArithmeticConstraintEncoder
                 // if leftOperand == rightOperand, then encode equality between rightOperand and
                 // result, otherwise encode using encode()
                 return UnitsTypecheckUtils.unitsEqual(
-                                leftOperand.getValue(), rightOperand.getValue())
+                                leftOperand.getAnnotation(), rightOperand.getAnnotation())
                         ? UnitsZ3SmtEncoderUtils.equality(
                                 ctx,
                                 rightOperand.serialize(z3SmtFormatTranslator),

@@ -2,7 +2,6 @@ package units.solvers.backend.gje.encoder;
 
 import checkers.inference.model.ConstantSlot;
 import checkers.inference.model.Slot;
-import checkers.inference.model.VariableSlot;
 import checkers.inference.solver.backend.encoder.binary.SubtypeConstraintEncoder;
 import checkers.inference.solver.frontend.Lattice;
 import units.solvers.backend.gje.UnitsGJEFormatTranslator;
@@ -22,17 +21,17 @@ public class UnitsGJESubtypeConstraintEncoder extends UnitsGJEAbstractConstraint
     }
 
     @Override
-    public GJEEquationSet encodeVariable_Variable(VariableSlot subtype, VariableSlot supertype) {
+    public GJEEquationSet encodeVariable_Variable(Slot subtype, Slot supertype) {
         return encode(subtype, supertype);
     }
 
     @Override
-    public GJEEquationSet encodeVariable_Constant(VariableSlot subtype, ConstantSlot supertype) {
+    public GJEEquationSet encodeVariable_Constant(Slot subtype, ConstantSlot supertype) {
         return encode(subtype, supertype);
     }
 
     @Override
-    public GJEEquationSet encodeConstant_Variable(ConstantSlot subtype, VariableSlot supertype) {
+    public GJEEquationSet encodeConstant_Variable(ConstantSlot subtype, Slot supertype) {
         return encode(subtype, supertype);
     }
 }

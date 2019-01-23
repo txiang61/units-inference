@@ -610,7 +610,7 @@ public class UnitsRepresentationUtils {
         serializeableBaseUnitNames = new HashSet<>();
 
         for (ConstantSlot slot : constantSlots) {
-            TypecheckUnit unit = createTypecheckUnit(slot.getValue());
+            TypecheckUnit unit = createTypecheckUnit(slot.getAnnotation());
             // System.err.println(unit);
 
             serializePrefix = serializePrefix || (unit.getPrefixExponent() != 0);

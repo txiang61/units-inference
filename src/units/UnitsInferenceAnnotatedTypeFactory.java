@@ -10,6 +10,7 @@ import checkers.inference.VariableAnnotator;
 import checkers.inference.model.AnnotationLocation;
 import checkers.inference.model.ConstantSlot;
 import checkers.inference.model.ConstraintManager;
+import checkers.inference.model.PolyInvokeVariableSlot;
 import checkers.inference.model.Slot;
 import checkers.inference.model.VariableSlot;
 import com.sun.source.tree.BinaryTree;
@@ -244,12 +245,12 @@ public class UnitsInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeFa
                         inferenceTypeFactory.getAnnotatedType(binaryTree.getLeftOperand());
                 AnnotatedTypeMirror rhsATM =
                         inferenceTypeFactory.getAnnotatedType(binaryTree.getRightOperand());
-                VariableSlot lhs = slotManager.getVariableSlot(lhsATM);
-                VariableSlot rhs = slotManager.getVariableSlot(rhsATM);
+                Slot lhs = slotManager.getSlot(lhsATM);
+                Slot rhs = slotManager.getSlot(rhsATM);
 
                 // create varslot for the result of the binary tree computation
                 // note: constraints for binary ops are added in UnitsVisitor
-                VariableSlot result;
+                Slot result;
                 switch (binaryTree.getKind()) {
                     case PLUS:
                         // if it is a string concatenation, result is dimensionless
@@ -290,8 +291,8 @@ public class UnitsInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeFa
                 // add to cache
                 Set<AnnotationMirror> resultSet = AnnotationUtils.createAnnotationSet();
                 resultSet.add(resultAM);
-                final Pair<VariableSlot, Set<? extends AnnotationMirror>> varATMPair =
-                        Pair.of(slotManager.getVariableSlot(atm), resultSet);
+                final Pair<Slot, Set<? extends AnnotationMirror>> varATMPair =
+                        Pair.of(slotManager.getSlot(atm), resultSet);
                 treeToVarAnnoPair.put(binaryTree, varATMPair);
             }
         }
@@ -386,7 +387,7 @@ public class UnitsInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeFa
                             || (fromByteCode
                                     && slot.isConstant()
                                     && AnnotationUtils.areSame(
-                                            ((ConstantSlot) slot).getValue(),
+                                            ((ConstantSlot) slot).getAnnotation(),
                                             unitsRepUtils.DIMENSIONLESS))) {
                         // Generate a fresh variable for inference
                         AnnotationLocation loc =
@@ -405,7 +406,7 @@ public class UnitsInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeFa
         private boolean isPolyAnnotation(AnnotationMirror annot) {
             Slot slot = slotManager.getSlot(annot);
             if (slot.isConstant()) {
-                AnnotationMirror constant = ((ConstantSlot) slot).getValue();
+                AnnotationMirror constant = ((ConstantSlot) slot).getAnnotation();
                 return InferenceQualifierHierarchy.isPolymorphic(constant);
             }
             return false;
@@ -497,18 +498,21 @@ public class UnitsInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeFa
              * inserted as @m Clazz x = new @1 Clazz(@2 param)
              */
 
+            /**
+             * TODO: properly create PolyInvokeVariableSlot in InferenceATF so that it's shared
+             * across type systems?? {@link InferenceQualifierPolymorphism} {@link
+             * VariableAnnotator#getOrCreatePolyVar}
+             */
             if (isConstructorDeclaredWithPolymorphicReturn(newClassTree)) {
                 // For a call "new @m Clazz(@m arg)" on a polymorphic constructor
                 // "@Poly Clazz(@Poly param)" we have the following annotations:
 
                 // 1) the variable slot generated for the polymorphic declared return type
-                VariableSlot varSlotForPolyReturn =
+                PolyInvokeVariableSlot varSlotForPolyReturn =
                         variableAnnotator.getOrCreatePolyVar(newClassTree);
-                // disable insertion of polymorphic return variable slot
-                varSlotForPolyReturn.setInsertable(false);
 
                 // 2) the call site return type: "@m" in "new @m Clazz(...)"
-                VariableSlot callSiteReturnVarSlot = slotManager.getVariableSlot(atm);
+                Slot callSiteReturnVarSlot = slotManager.getSlot(atm);
 
                 // Create a subtype constraint: callSiteReturnVarSlot <: varSlotForPolyReturn
                 // since after annotation insertion, the varSlotForPolyReturn is conceptually a
@@ -530,10 +534,8 @@ public class UnitsInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeFa
             super.visitMethodInvocation(methodInvocationTree, atm);
 
             if (isMethodDeclaredWithPolymorphicReturn(methodInvocationTree)) {
-                VariableSlot varSlotForPolyReturn =
-                        variableAnnotator.getOrCreatePolyVar(methodInvocationTree);
-                // disable insertion of polymorphic return variable slot
-                varSlotForPolyReturn.setInsertable(false);
+                // PolyInvokeVariableSlot varSlotForPolyReturn =
+                variableAnnotator.getOrCreatePolyVar(methodInvocationTree);
             }
 
             return null;

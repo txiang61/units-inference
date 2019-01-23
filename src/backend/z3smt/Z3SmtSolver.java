@@ -7,7 +7,6 @@ import checkers.inference.model.ComparableConstraint;
 import checkers.inference.model.Constraint;
 import checkers.inference.model.Slot;
 import checkers.inference.model.SubtypeConstraint;
-import checkers.inference.model.VariableSlot;
 import checkers.inference.model.serialization.ToStringSerializer;
 import checkers.inference.solver.backend.Solver;
 import checkers.inference.solver.frontend.Lattice;
@@ -339,17 +338,14 @@ public class Z3SmtSolver<SlotEncodingT, SlotSolutionT>
         // generate slot constraints
         for (Slot slot : slots) {
             if (slot.isVariable()) {
-                VariableSlot varSlot = (VariableSlot) slot;
-
-                BoolExpr wfConstraint = formatTranslator.encodeSlotWellformnessConstraint(varSlot);
+                BoolExpr wfConstraint = formatTranslator.encodeSlotWellformnessConstraint(slot);
 
                 if (!wfConstraint.simplify().isTrue()) {
                     solver.Assert(wfConstraint);
                 }
                 if (optimizingMode) {
                     // empty string means no optimization group
-                    solver.AssertSoft(
-                            formatTranslator.encodeSlotPreferenceConstraint(varSlot), 1, "");
+                    solver.AssertSoft(formatTranslator.encodeSlotPreferenceConstraint(slot), 1, "");
                 }
             }
         }

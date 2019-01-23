@@ -4,7 +4,6 @@ import backend.z3smt.Z3SmtFormatTranslator;
 import backend.z3smt.encoder.Z3SmtAbstractConstraintEncoder;
 import checkers.inference.model.ConstantSlot;
 import checkers.inference.model.Slot;
-import checkers.inference.model.VariableSlot;
 import checkers.inference.solver.backend.encoder.binary.SubtypeConstraintEncoder;
 import checkers.inference.solver.frontend.Lattice;
 import com.microsoft.z3.BoolExpr;
@@ -31,17 +30,17 @@ public class UnitsZ3SmtSubtypeConstraintEncoder
     }
 
     @Override
-    public BoolExpr encodeVariable_Variable(VariableSlot subtype, VariableSlot supertype) {
+    public BoolExpr encodeVariable_Variable(Slot subtype, Slot supertype) {
         return encode(subtype, supertype);
     }
 
     @Override
-    public BoolExpr encodeVariable_Constant(VariableSlot subtype, ConstantSlot supertype) {
+    public BoolExpr encodeVariable_Constant(Slot subtype, ConstantSlot supertype) {
         return encode(subtype, supertype);
     }
 
     @Override
-    public BoolExpr encodeConstant_Variable(ConstantSlot subtype, VariableSlot supertype) {
+    public BoolExpr encodeConstant_Variable(ConstantSlot subtype, Slot supertype) {
         return encode(subtype, supertype);
     }
 }

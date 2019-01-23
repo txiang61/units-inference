@@ -3,7 +3,6 @@ package units.solvers.backend.z3smt;
 import backend.z3smt.Z3SmtFormatTranslator;
 import checkers.inference.model.ConstantSlot;
 import checkers.inference.model.Slot;
-import checkers.inference.model.VariableSlot;
 import checkers.inference.solver.backend.encoder.ConstraintEncoderFactory;
 import checkers.inference.solver.frontend.Lattice;
 import com.microsoft.z3.BoolExpr;
@@ -18,6 +17,7 @@ import java.util.Set;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 import org.checkerframework.javacutil.AnnotationUtils;
+import org.checkerframework.javacutil.BugInCF;
 import org.checkerframework.javacutil.Pair;
 import units.representation.TypecheckUnit;
 import units.representation.UnitsRepresentationUtils;
@@ -53,8 +53,8 @@ public class UnitsZ3SmtFormatTranslator
     }
 
     @Override
-    public String generateZ3SlotDeclaration(VariableSlot slot) {
-        Z3InferenceUnit encodedSlot = serializeVarSlot(slot);
+    public String generateZ3SlotDeclaration(Slot slot) {
+        Z3InferenceUnit encodedSlot = serializeSlot(slot);
 
         List<String> slotDeclaration = new ArrayList<>();
 
@@ -90,7 +90,11 @@ public class UnitsZ3SmtFormatTranslator
     }
 
     @Override
-    protected Z3InferenceUnit serializeVarSlot(VariableSlot slot) {
+    protected Z3InferenceUnit serializeSlot(Slot slot) {
+        if (slot.isConstant()) {
+            throw new BugInCF("don't serialize constant slots here");
+        }
+
         int slotID = slot.getId();
 
         if (serializedSlots.containsKey(slotID)) {
@@ -111,7 +115,7 @@ public class UnitsZ3SmtFormatTranslator
             return serializedSlots.get(slotID);
         }
 
-        AnnotationMirror anno = slot.getValue();
+        AnnotationMirror anno = slot.getAnnotation();
 
         // Temp Hack: forcefully encode constant slot for poly qualifiers as
         // unknownunits
@@ -167,32 +171,34 @@ public class UnitsZ3SmtFormatTranslator
     }
 
     @Override
-    public BoolExpr encodeSlotWellformnessConstraint(VariableSlot slot) {
-        if (slot instanceof ConstantSlot) {
-            ConstantSlot cs = (ConstantSlot) slot;
-            AnnotationMirror anno = cs.getValue();
-            // encode PolyAll and PolyUnit as constant trues
-            if (AnnotationUtils.areSame(anno, unitsRepUtils.POLYALL)
-                    || AnnotationUtils.areSame(anno, unitsRepUtils.POLYUNIT)) {
-                return ctx.mkTrue();
-            }
-        }
+    public BoolExpr encodeSlotWellformnessConstraint(Slot slot) {
+        // TODO: See if this is still called with constant slots
+        // if (slot instanceof ConstantSlot) {
+        // ConstantSlot cs = (ConstantSlot) slot;
+        // AnnotationMirror anno = cs.getAnnotation();
+        // // encode PolyAll and PolyUnit as constant trues
+        // if (AnnotationUtils.areSame(anno, unitsRepUtils.POLYALL)
+        // || AnnotationUtils.areSame(anno, unitsRepUtils.POLYUNIT)) {
+        // return ctx.mkTrue();
+        // }
+        // }
 
         Z3InferenceUnit serializedSlot = slot.serialize(this);
         return UnitsZ3SmtEncoderUtils.slotWellformedness(ctx, serializedSlot);
     }
 
     @Override
-    public BoolExpr encodeSlotPreferenceConstraint(VariableSlot slot) {
-        if (slot instanceof ConstantSlot) {
-            ConstantSlot cs = (ConstantSlot) slot;
-            AnnotationMirror anno = cs.getValue();
-            // encode PolyAll and PolyUnit as constant trues
-            if (AnnotationUtils.areSame(anno, unitsRepUtils.POLYALL)
-                    || AnnotationUtils.areSame(anno, unitsRepUtils.POLYUNIT)) {
-                return ctx.mkTrue();
-            }
-        }
+    public BoolExpr encodeSlotPreferenceConstraint(Slot slot) {
+        // TODO: See if this is still called with constant slots
+        // if (slot instanceof ConstantSlot) {
+        // ConstantSlot cs = (ConstantSlot) slot;
+        // AnnotationMirror anno = cs.getAnnotation();
+        // // encode PolyAll and PolyUnit as constant trues
+        // if (AnnotationUtils.areSame(anno, unitsRepUtils.POLYALL)
+        // || AnnotationUtils.areSame(anno, unitsRepUtils.POLYUNIT)) {
+        // return ctx.mkTrue();
+        // }
+        // }
 
         Z3InferenceUnit serializedSlot = slot.serialize(this);
         return UnitsZ3SmtEncoderUtils.slotPreference(ctx, serializedSlot);

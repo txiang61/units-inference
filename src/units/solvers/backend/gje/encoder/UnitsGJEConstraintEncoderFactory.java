@@ -6,10 +6,10 @@ import checkers.inference.solver.backend.encoder.binary.ComparableConstraintEnco
 import checkers.inference.solver.backend.encoder.binary.EqualityConstraintEncoder;
 import checkers.inference.solver.backend.encoder.binary.InequalityConstraintEncoder;
 import checkers.inference.solver.backend.encoder.binary.SubtypeConstraintEncoder;
-import checkers.inference.solver.backend.encoder.combine.CombineConstraintEncoder;
 import checkers.inference.solver.backend.encoder.existential.ExistentialConstraintEncoder;
 import checkers.inference.solver.backend.encoder.implication.ImplicationConstraintEncoder;
 import checkers.inference.solver.backend.encoder.preference.PreferenceConstraintEncoder;
+import checkers.inference.solver.backend.encoder.vpa.VPAConstraintEncoder;
 import checkers.inference.solver.frontend.Lattice;
 import units.solvers.backend.gje.UnitsGJEFormatTranslator;
 import units.solvers.backend.gje.representation.GJEEquationSet;
@@ -59,7 +59,7 @@ public class UnitsGJEConstraintEncoderFactory
     }
 
     @Override
-    public CombineConstraintEncoder<GJEEquationSet> createCombineConstraintEncoder() {
+    public VPAConstraintEncoder<GJEEquationSet> createVPAConstraintEncoder() {
         return null;
     }
 

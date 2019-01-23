@@ -1,12 +1,14 @@
 package units.solvers.backend.gje;
 
-import checkers.inference.model.CombVariableSlot;
+import checkers.inference.model.ArithmeticVariableSlot;
 import checkers.inference.model.ConstantSlot;
 import checkers.inference.model.Constraint;
 import checkers.inference.model.ExistentialVariableSlot;
-import checkers.inference.model.LubVariableSlot;
+import checkers.inference.model.LUBVariableSlot;
+import checkers.inference.model.PolyInvokeVariableSlot;
 import checkers.inference.model.RefinementVariableSlot;
 import checkers.inference.model.Slot;
+import checkers.inference.model.VPAVariableSlot;
 import checkers.inference.model.VariableSlot;
 import checkers.inference.model.serialization.ToStringSerializer;
 import checkers.inference.solver.backend.AbstractFormatTranslator;
@@ -20,6 +22,7 @@ import java.util.Map;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 import org.checkerframework.javacutil.AnnotationUtils;
+import org.checkerframework.javacutil.BugInCF;
 import units.representation.TypecheckUnit;
 import units.representation.UnitsRepresentationUtils;
 import units.solvers.backend.gje.encoder.UnitsGJEConstraintEncoderFactory;
@@ -63,7 +66,7 @@ public class UnitsGJEFormatTranslator
             constraint.serialize(slotsCollector);
         }
 
-        for (VariableSlot slot : slotsCollector.getSlots()) {
+        for (Slot slot : slotsCollector.getSlots()) {
             slotGJEtoCFIMap.put(gjeID, slot);
             slotCFItoGJEMap.put(slot, gjeID);
             System.err.println("ID: " + gjeID + " --> slot " + slot.serialize(toStringSerializer));
@@ -73,7 +76,10 @@ public class UnitsGJEFormatTranslator
         return gjeID;
     }
 
-    protected GJEInferenceUnit serializeVarSlot(VariableSlot slot) {
+    protected GJEInferenceUnit serializeSlot(Slot slot) {
+        if (slot.isConstant()) {
+            throw new BugInCF("don't serialize constant slots here");
+        }
         int cfiSlotID = slot.getId();
         int gjeSlotID = slotCFItoGJEMap.get(slot);
 
@@ -94,7 +100,7 @@ public class UnitsGJEFormatTranslator
             return serializedSlots.get(slotID);
         }
 
-        AnnotationMirror anno = slot.getValue();
+        AnnotationMirror anno = slot.getAnnotation();
 
         // Temp Hack: forcefully encode constant slot for poly qualifiers as
         // unknownunits
@@ -137,7 +143,7 @@ public class UnitsGJEFormatTranslator
     @Override
     public GJEInferenceUnit serialize(VariableSlot slot) {
         // System.err.println("Serializing vs " + slot);
-        return serializeVarSlot(slot);
+        return serializeSlot(slot);
     }
 
     @Override
@@ -148,22 +154,32 @@ public class UnitsGJEFormatTranslator
 
     @Override
     public GJEInferenceUnit serialize(ExistentialVariableSlot slot) {
-        return serializeVarSlot(slot);
+        return serializeSlot(slot);
     }
 
     @Override
     public GJEInferenceUnit serialize(RefinementVariableSlot slot) {
-        return serializeVarSlot(slot);
+        return serializeSlot(slot);
     }
 
     @Override
-    public GJEInferenceUnit serialize(CombVariableSlot slot) {
-        return serializeVarSlot(slot);
+    public GJEInferenceUnit serialize(VPAVariableSlot slot) {
+        return serializeSlot(slot);
     }
 
     @Override
-    public GJEInferenceUnit serialize(LubVariableSlot slot) {
-        return serializeVarSlot(slot);
+    public GJEInferenceUnit serialize(LUBVariableSlot slot) {
+        return serializeSlot(slot);
+    }
+
+    @Override
+    public GJEInferenceUnit serialize(ArithmeticVariableSlot slot) {
+        return serializeSlot(slot);
+    }
+
+    @Override
+    public GJEInferenceUnit serialize(PolyInvokeVariableSlot slot) {
+        return serializeSlot(slot);
     }
 
     // Decode overall solutions from GJE
