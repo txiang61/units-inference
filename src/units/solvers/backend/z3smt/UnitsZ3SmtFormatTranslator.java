@@ -7,8 +7,6 @@ import checkers.inference.model.VariableSlot;
 import checkers.inference.solver.backend.encoder.ConstraintEncoderFactory;
 import checkers.inference.solver.frontend.Lattice;
 import com.microsoft.z3.BoolExpr;
-import com.microsoft.z3.IntExpr;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;

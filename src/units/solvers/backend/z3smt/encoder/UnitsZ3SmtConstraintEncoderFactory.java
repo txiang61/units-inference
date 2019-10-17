@@ -23,7 +23,7 @@ import units.solvers.backend.z3smt.representation.Z3InferenceUnit;
  * @see checkers.inference.solver.backend.encoder.ConstraintEncoderFactory
  */
 public class UnitsZ3SmtConstraintEncoderFactory
-        extends Z3SmtConstraintEncoderFactory<Z3InferenceUnit, TypecheckUnit, UnitsZ3SmtFormatTranslator> {
+        extends Z3SmtConstraintEncoderFactory<Z3InferenceUnit, TypecheckUnit> {
     public UnitsZ3SmtConstraintEncoderFactory(
             Lattice lattice,
             Context ctx,
