@@ -20,6 +20,7 @@ import org.checkerframework.framework.type.AnnotationClassLoader;
 import org.checkerframework.framework.type.DefaultAnnotatedTypeFormatter;
 import org.checkerframework.framework.type.QualifierHierarchy;
 import org.checkerframework.framework.type.treeannotator.ListTreeAnnotator;
+import org.checkerframework.framework.type.treeannotator.LiteralTreeAnnotator;
 import org.checkerframework.framework.type.treeannotator.PropagationTreeAnnotator;
 import org.checkerframework.framework.type.treeannotator.TreeAnnotator;
 import org.checkerframework.framework.type.typeannotator.DefaultForTypeAnnotator;
@@ -334,13 +335,18 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
     @Override
     public TreeAnnotator createTreeAnnotator() {
         return new ListTreeAnnotator(
-                new UnitsTypecheckLiteralTreeAnnotator(), new UnitsPropagationTreeAnnotator());
+                new UnitsLiteralTreeAnnotator(this), new UnitsPropagationTreeAnnotator());
     }
 
-    protected final class UnitsTypecheckLiteralTreeAnnotator extends UnitsLiteralTreeAnnotator {
+    protected final class UnitsLiteralTreeAnnotator extends LiteralTreeAnnotator {
         // Programmatically set the qualifier implicits
-        public UnitsTypecheckLiteralTreeAnnotator() {
-            super(UnitsAnnotatedTypeFactory.this);
+        public UnitsLiteralTreeAnnotator(AnnotatedTypeFactory atf) {
+            super(atf);
+            // set BOTTOM as the literal qualifier for null literals
+            addLiteralKind(LiteralKind.NULL, unitsRepUtils.BOTTOM);
+            addLiteralKind(LiteralKind.STRING, unitsRepUtils.DIMENSIONLESS);
+            addLiteralKind(LiteralKind.CHAR, unitsRepUtils.DIMENSIONLESS);
+            addLiteralKind(LiteralKind.BOOLEAN, unitsRepUtils.DIMENSIONLESS);
             // in type checking mode, we also set dimensionless for the number literals
             addLiteralKind(LiteralKind.INT, unitsRepUtils.DIMENSIONLESS);
             addLiteralKind(LiteralKind.LONG, unitsRepUtils.DIMENSIONLESS);
