@@ -19,6 +19,7 @@ import org.checkerframework.framework.type.AnnotatedTypeMirror;
 import org.checkerframework.framework.type.AnnotationClassLoader;
 import org.checkerframework.framework.type.DefaultAnnotatedTypeFormatter;
 import org.checkerframework.framework.type.QualifierHierarchy;
+import org.checkerframework.framework.type.ViewpointAdapter;
 import org.checkerframework.framework.type.treeannotator.ListTreeAnnotator;
 import org.checkerframework.framework.type.treeannotator.LiteralTreeAnnotator;
 import org.checkerframework.framework.type.treeannotator.PropagationTreeAnnotator;
@@ -35,6 +36,7 @@ import org.checkerframework.javacutil.BugInCF;
 import org.checkerframework.javacutil.TreeUtils;
 import org.checkerframework.javacutil.UserError;
 import units.qual.BaseUnit;
+import units.qual.RDU;
 import units.qual.UnitsAlias;
 import units.qual.UnitsRep;
 import units.representation.UnitsRepresentationUtils;
@@ -54,6 +56,11 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
     protected AnnotationClassLoader createAnnotationClassLoader() {
         // Use the Units Annotated Type Loader instead of the default one
         return new UnitsAnnotationClassLoader(checker);
+    }
+    
+    @Override
+    protected ViewpointAdapter createViewpointAdapter() {
+        return new UnitsViewpointAdapter(this);
     }
 
     @Override
@@ -122,7 +129,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
         if (AnnotationUtils.areSameByClass(anno, UnitsRep.class)) {
             return unitsRepUtils.hasAllBaseUnits(anno);
         }
-        // Anno is PolyAll, PolyUnit
+        // Anno is PolyUnit
         return AnnotationUtils.containsSame(this.getQualifierHierarchy().getTypeQualifiers(), anno);
     }
 
@@ -151,22 +158,22 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
     // -AuseDefaultsForUncheckedCode=bytecode // uses those defaults in byte code
     // -AuseDefaultsForUncheckedCode=source,bytecode // also uses those defaults in
     // source code
-    @Override
-    protected void addUncheckedCodeDefaults(QualifierDefaults defs) {
-        super.addUncheckedCodeDefaults(defs);
-
-        // experiment with:
-        // This seems to have no effect thus far in the constraints generated in inference
-        // top param, receiver, bot return for inference, explain unsat
-        defs.addUncheckedCodeDefault(unitsRepUtils.TOP, TypeUseLocation.RECEIVER);
-        defs.addUncheckedCodeDefault(unitsRepUtils.TOP, TypeUseLocation.PARAMETER);
-        defs.addUncheckedCodeDefault(unitsRepUtils.BOTTOM, TypeUseLocation.RETURN);
-
-        // bot param, top return for tightest api restriction??
-
-        // dimensionless is default for all other locations
-        // defs.addUncheckedCodeDefault(unitsRepUtils.DIMENSIONLESS, TypeUseLocation.OTHERWISE);
-    }
+//    @Override
+//    protected void addUncheckedCodeDefaults(QualifierDefaults defs) {
+//        super.addUncheckedCodeDefaults(defs);
+//
+//        // experiment with:
+//        // This seems to have no effect thus far in the constraints generated in inference
+//        // top param, receiver, bot return for inference, explain unsat
+//        defs.addUncheckedCodeDefault(unitsRepUtils.TOP, TypeUseLocation.RECEIVER);
+//        defs.addUncheckedCodeDefault(unitsRepUtils.TOP, TypeUseLocation.PARAMETER);
+//        defs.addUncheckedCodeDefault(unitsRepUtils.BOTTOM, TypeUseLocation.RETURN);
+//
+//        // bot param, top return for tightest api restriction??
+//
+//        // dimensionless is default for all other locations
+//        // defs.addUncheckedCodeDefault(unitsRepUtils.DIMENSIONLESS, TypeUseLocation.OTHERWISE);
+//    }
 
     @Override
     public QualifierHierarchy createQualifierHierarchy(MultiGraphFactory factory) {
@@ -262,6 +269,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
 
             // Update tops
             tops.remove(unitsRepUtils.RAWUNITSREP);
+            tops.remove(unitsRepUtils.RECEIVER_DEPENDANT_UNIT);
             tops.add(unitsRepUtils.TOP);
 
             // System.err.println(" === Typecheck ATF ");
@@ -299,11 +307,19 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                 return true;
             }
 
-            // Case: @PolyAll and @PolyUnit are treated as @UnknownUnits
+            // Case: @PolyUnit are treated as @UnknownUnits
             if (AnnotationUtils.areSame(subAnno, unitsRepUtils.POLYUNIT)) {
                 return isSubtype(unitsRepUtils.TOP, superAnno);
             }
             if (AnnotationUtils.areSame(superAnno, unitsRepUtils.POLYUNIT)) {
+                return true;
+            }
+            
+            // Case: @RDU are treated as @UnknownUnits
+            if (AnnotationUtils.areSame(subAnno, unitsRepUtils.RECEIVER_DEPENDANT_UNIT)) {
+                return isSubtype(unitsRepUtils.TOP, superAnno);
+            }
+            if (AnnotationUtils.areSame(superAnno, unitsRepUtils.RECEIVER_DEPENDANT_UNIT)) {
                 return true;
             }
 
