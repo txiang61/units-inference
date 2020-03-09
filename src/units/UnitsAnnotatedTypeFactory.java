@@ -19,6 +19,7 @@ import org.checkerframework.framework.type.AnnotatedTypeMirror;
 import org.checkerframework.framework.type.AnnotationClassLoader;
 import org.checkerframework.framework.type.DefaultAnnotatedTypeFormatter;
 import org.checkerframework.framework.type.QualifierHierarchy;
+import org.checkerframework.framework.type.ViewpointAdapter;
 import org.checkerframework.framework.type.treeannotator.ListTreeAnnotator;
 import org.checkerframework.framework.type.treeannotator.LiteralTreeAnnotator;
 import org.checkerframework.framework.type.treeannotator.PropagationTreeAnnotator;
@@ -54,6 +55,11 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
     protected AnnotationClassLoader createAnnotationClassLoader() {
         // Use the Units Annotated Type Loader instead of the default one
         return new UnitsAnnotationClassLoader(checker);
+    }
+    
+    @Override
+    protected ViewpointAdapter createViewpointAdapter() {
+        return new UnitsViewpointAdapter(this);
     }
 
     @Override
@@ -262,6 +268,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
 
             // Update tops
             tops.remove(unitsRepUtils.RAWUNITSREP);
+            tops.remove(unitsRepUtils.RECEIVER_DEPENDANT_UNIT);
             tops.add(unitsRepUtils.TOP);
 
             // System.err.println(" === Typecheck ATF ");
@@ -299,11 +306,19 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                 return true;
             }
 
-            // Case: @PolyAll and @PolyUnit are treated as @UnknownUnits
+            // Case: @PolyUnit are treated as @UnknownUnits
             if (AnnotationUtils.areSame(subAnno, unitsRepUtils.POLYUNIT)) {
                 return isSubtype(unitsRepUtils.TOP, superAnno);
             }
             if (AnnotationUtils.areSame(superAnno, unitsRepUtils.POLYUNIT)) {
+                return true;
+            }
+            
+            // Case: @RDU are treated as @UnknownUnits
+            if (AnnotationUtils.areSame(subAnno, unitsRepUtils.RECEIVER_DEPENDANT_UNIT)) {
+                return isSubtype(unitsRepUtils.TOP, superAnno);
+            }
+            if (AnnotationUtils.areSame(superAnno, unitsRepUtils.RECEIVER_DEPENDANT_UNIT)) {
                 return true;
             }
 

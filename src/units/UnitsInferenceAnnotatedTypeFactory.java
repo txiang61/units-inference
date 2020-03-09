@@ -14,6 +14,8 @@ import checkers.inference.model.ConstraintManager;
 import checkers.inference.model.Slot;
 import checkers.inference.model.VariableSlot;
 import checkers.inference.qual.VarAnnot;
+import checkers.inference.util.InferenceViewpointAdapter;
+
 import com.sun.source.tree.BinaryTree;
 import com.sun.source.tree.ExpressionTree;
 import com.sun.source.tree.IdentifierTree;
@@ -44,6 +46,7 @@ import org.checkerframework.framework.util.AnnotationFormatter;
 import org.checkerframework.framework.util.MultiGraphQualifierHierarchy.MultiGraphFactory;
 import org.checkerframework.javacutil.AnnotationBuilder;
 import org.checkerframework.javacutil.AnnotationUtils;
+import org.checkerframework.javacutil.BugInCF;
 import org.checkerframework.javacutil.ElementUtils;
 import org.checkerframework.javacutil.Pair;
 import org.checkerframework.javacutil.TreeUtils;
@@ -90,6 +93,11 @@ public class UnitsInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeFa
     protected AnnotationClassLoader createAnnotationClassLoader() {
         // Use the Units Annotated Type Loader instead of the default one
         return new UnitsAnnotationClassLoader(checker);
+    }
+    
+    @Override
+    protected InferenceViewpointAdapter createViewpointAdapter() {
+        return new UnitsInferenceViewpointAdapter(this);
     }
 
     // In Inference ATF, this returns the set of real qualifiers
@@ -234,7 +242,32 @@ public class UnitsInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeFa
                 return result;
             }
 
-            return super.leastUpperBounds(annos1, annos2);
+            if (annos1.isEmpty()) {
+            	throw new BugInCF(
+            			"QualifierHierarchy.leastUpperBounds: tried to determine LUB with empty sets");
+            }
+
+            Set<AnnotationMirror> result = AnnotationUtils.createAnnotationSet();
+            for (AnnotationMirror a1 : annos1) {
+                for (AnnotationMirror a2 : annos2) {
+                    AnnotationMirror lub = leastUpperBound(a1, a2);
+                    if (lub != null) {
+                        result.add(lub);
+                    }
+                }
+            }
+            
+            if (annos1.size() == result.size() || annos2.size() == result.size()) {
+                return result;
+            } else {
+               throw new BugInCF("QualifierHierarchy.leastUpperBounds: resulting set has incorrect number of annotations.\n"
+                                + "    Set 1: "
+                                + annos1
+                                + " Set 2: "
+                                + annos2
+                                + " LUB: "
+                                + result);            
+            }
         }
     }
 
