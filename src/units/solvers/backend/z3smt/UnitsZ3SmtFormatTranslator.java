@@ -138,6 +138,9 @@ public class UnitsZ3SmtFormatTranslator
             encodedSlot.setUnknownUnits(true);
         } else if (unit.isUnitsBottom()) {
             encodedSlot.setUnitsBottom(true);
+        }
+        if (unit.isRDUnits()) {
+            encodedSlot.setRDUnits(true);
         } else {
             encodedSlot.setPrefixExponent(unit.getPrefixExponent());
             for (String bu : unitsRepUtils.serializableBaseUnits()) {
@@ -169,7 +172,7 @@ public class UnitsZ3SmtFormatTranslator
         if (slot instanceof ConstantSlot) {
             ConstantSlot cs = (ConstantSlot) slot;
             AnnotationMirror anno = cs.getValue();
-            // encode PolyAll and PolyUnit as constant trues
+            // encode PolyUnit as constant trues
             if (AnnotationUtils.areSame(anno, unitsRepUtils.POLYUNIT)) {
                 return ctx.mkTrue();
             }
@@ -184,7 +187,7 @@ public class UnitsZ3SmtFormatTranslator
         if (slot instanceof ConstantSlot) {
             ConstantSlot cs = (ConstantSlot) slot;
             AnnotationMirror anno = cs.getValue();
-            // encode PolyAll and PolyUnit as constant trues
+            // encode PolyUnit as constant trues
             if (AnnotationUtils.areSame(anno, unitsRepUtils.POLYUNIT)) {
                 return ctx.mkTrue();
             }
@@ -226,6 +229,8 @@ public class UnitsZ3SmtFormatTranslator
                 z3Slot.setUnknownUnits(Boolean.parseBoolean(value));
             } else if (component.contentEquals(UnitsZ3SmtEncoderUtils.ubSlotName)) {
                 z3Slot.setUnitsBottom(Boolean.parseBoolean(value));
+            } else if (component.contentEquals(UnitsZ3SmtEncoderUtils.rduSlotName)) {
+                z3Slot.setRDUnits(Boolean.parseBoolean(value));
             } else if (component.contentEquals(UnitsZ3SmtEncoderUtils.prefixSlotName)) {
                 z3Slot.setPrefixExponent(Integer.parseInt(value));
             } else {

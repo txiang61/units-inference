@@ -16,6 +16,7 @@ public class UnitsZ3SmtEncoderUtils {
     private static final char idComponentSeparator = '-';
     public static final String uuSlotName = "TOP";
     public static final String ubSlotName = "BOT";
+    public static final String rduSlotName = "RDU";
     public static final String prefixSlotName = "PREFIX";
 
     public static String z3VarName(int slotID, String component) {

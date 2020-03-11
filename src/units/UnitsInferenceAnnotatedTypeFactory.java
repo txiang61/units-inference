@@ -15,7 +15,6 @@ import checkers.inference.model.Slot;
 import checkers.inference.model.VariableSlot;
 import checkers.inference.qual.VarAnnot;
 import checkers.inference.util.InferenceViewpointAdapter;
-
 import com.sun.source.tree.BinaryTree;
 import com.sun.source.tree.ExpressionTree;
 import com.sun.source.tree.IdentifierTree;
@@ -94,11 +93,11 @@ public class UnitsInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeFa
         // Use the Units Annotated Type Loader instead of the default one
         return new UnitsAnnotationClassLoader(checker);
     }
-    
-    @Override
-    protected InferenceViewpointAdapter createViewpointAdapter() {
-        return new UnitsInferenceViewpointAdapter(this);
-    }
+
+//    @Override
+//    protected InferenceViewpointAdapter createViewpointAdapter() {
+//        return new UnitsInferenceViewpointAdapter(this);
+//    }
 
     // In Inference ATF, this returns the set of real qualifiers
     @Override
@@ -243,8 +242,8 @@ public class UnitsInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeFa
             }
 
             if (annos1.isEmpty()) {
-            	throw new BugInCF(
-            			"QualifierHierarchy.leastUpperBounds: tried to determine LUB with empty sets");
+                throw new BugInCF(
+                        "QualifierHierarchy.leastUpperBounds: tried to determine LUB with empty sets");
             }
 
             Set<AnnotationMirror> result = AnnotationUtils.createAnnotationSet();
@@ -256,19 +255,42 @@ public class UnitsInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeFa
                     }
                 }
             }
-            
+
             if (annos1.size() == result.size() || annos2.size() == result.size()) {
                 return result;
             } else {
-               throw new BugInCF("QualifierHierarchy.leastUpperBounds: resulting set has incorrect number of annotations.\n"
+                throw new BugInCF(
+                        "QualifierHierarchy.leastUpperBounds: resulting set has incorrect number of annotations.\n"
                                 + "    Set 1: "
                                 + annos1
                                 + " Set 2: "
                                 + annos2
                                 + " LUB: "
-                                + result);            
+                                + result);
             }
         }
+
+        //        @Override
+        //        public boolean isSubtype(AnnotationMirror subtype, AnnotationMirror supertype) {
+        //        	if (!isVarAnnot(subtype) && !isVarAnnot(supertype)) {
+        //                // Case: All units <: Top
+        //                if (AnnotationUtils.areSame(supertype, unitsRepUtils.TOP)) {
+        //                    return true;
+        //                }
+        //                // Case: Bottom <: All units
+        //                if (AnnotationUtils.areSame(subtype, unitsRepUtils.BOTTOM)) {
+        //                    return true;
+        //                }
+        //
+        //                // Case: @UnitsRep(x) <: @UnitsRep(y)
+        //                if (AnnotationUtils.areSameByClass(subtype, UnitsRep.class)
+        //                        && AnnotationUtils.areSameByClass(supertype, UnitsRep.class)) {
+        //                    return UnitsTypecheckUtils.unitsEqual(subtype, supertype);
+        //                }
+        //            }
+        //
+        //        	return super.isSubtype(subtype, supertype);
+        //        }
     }
 
     @Override

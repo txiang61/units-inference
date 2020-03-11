@@ -64,7 +64,7 @@ public class UnitsRepresentationUtils {
     public AnnotationMirror SURFACE_TOP;
 
     public AnnotationMirror SURFACE_BOTTOM;
-    
+
     public AnnotationMirror RECEIVER_DEPENDANT_UNIT;
 
     // /** Instance of {@link VarAnnot} for use in UnitsVisitor in infer mode. */
@@ -496,8 +496,10 @@ public class UnitsRepresentationUtils {
         TypecheckUnit unit = new TypecheckUnit();
 
         // if it is a polyunit annotation, generate top
-        if (AnnotationUtils.areSameByClass(anno, PolyUnit.class) || AnnotationUtils.areSameByClass(anno, RDU.class)) {
+        if (AnnotationUtils.areSameByClass(anno, PolyUnit.class)) {
             unit.setUnknownUnits(true);
+        } else if (AnnotationUtils.areSameByClass(anno, RDU.class)) {
+            unit.setRDUnits(true);
         }
         // if it is a units internal annotation, generate the internal unit
         else if (AnnotationUtils.areSameByClass(anno, UnitsRep.class)) {
