@@ -94,10 +94,10 @@ public class UnitsInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeFa
         return new UnitsAnnotationClassLoader(checker);
     }
 
-//    @Override
-//    protected InferenceViewpointAdapter createViewpointAdapter() {
-//        return new UnitsInferenceViewpointAdapter(this);
-//    }
+    @Override
+    protected InferenceViewpointAdapter createViewpointAdapter() {
+        return new UnitsInferenceViewpointAdapter(this);
+    }
 
     // In Inference ATF, this returns the set of real qualifiers
     @Override

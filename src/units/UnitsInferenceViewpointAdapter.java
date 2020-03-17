@@ -26,13 +26,4 @@ public class UnitsInferenceViewpointAdapter extends InferenceViewpointAdapter {
         }
         return super.shouldAdaptMember(type, element);
     }
-
-    //    @Override
-    //    protected AnnotationMirror combineAnnotationWithAnnotation(
-    //            AnnotationMirror receiver, AnnotationMirror declared) {
-    //        if (AnnotationUtils.areSame(declared, unitsRepUtils.RECEIVER_DEPENDANT_UNIT)) {
-    //            return super.combineAnnotationWithAnnotation(receiver, declared);
-    //        }
-    //        return declared;
-    //    }
 }
