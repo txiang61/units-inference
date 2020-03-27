@@ -63,23 +63,23 @@ class JavaUtilConcurrentTimeUnit {
         // :: error: (assignment.type.incompatible)
         @s TimeUnit s4 = NANOSECONDS;
     }
-    
+
     void testParams(@ns long ns, @s long s) {
-    	@s TimeUnit s_unit = TimeUnit.SECONDS;
-    	@ns TimeUnit ns_unit = NANOSECONDS;
-        
-    	TimeUnit.SECONDS.toMillis(s);
+        @s TimeUnit s_unit = TimeUnit.SECONDS;
+        @ns TimeUnit ns_unit = NANOSECONDS;
+
+        TimeUnit.SECONDS.toMillis(s);
         TimeUnit.NANOSECONDS.toMillis(ns);
         // :: error: (argument.type.incompatible)
-		TimeUnit.NANOSECONDS.toMillis(s);
+        TimeUnit.NANOSECONDS.toMillis(s);
         // :: error: (argument.type.incompatible)
-		TimeUnit.SECONDS.toMillis(ns);
-		
-		ns_unit.toMillis(ns);
-		s_unit.toMillis(s);
+        TimeUnit.SECONDS.toMillis(ns);
+
+        ns_unit.toMillis(ns);
+        s_unit.toMillis(s);
         // :: error: (argument.type.incompatible)
-		s_unit.toMillis(ns);
-		// :: error: (argument.type.incompatible)
-		ns_unit.toMillis(s);
-	}
+        s_unit.toMillis(ns);
+        // :: error: (argument.type.incompatible)
+        ns_unit.toMillis(s);
+    }
 }

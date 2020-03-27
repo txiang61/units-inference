@@ -36,10 +36,8 @@ import org.checkerframework.javacutil.BugInCF;
 import org.checkerframework.javacutil.TreeUtils;
 import org.checkerframework.javacutil.UserError;
 import units.qual.BaseUnit;
-import units.qual.RDU;
 import units.qual.UnitsAlias;
 import units.qual.UnitsRep;
-import units.qual.UnknownUnits;
 import units.representation.UnitsRepresentationUtils;
 import units.util.UnitsTypecheckUtils;
 
@@ -63,7 +61,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
     protected ViewpointAdapter createViewpointAdapter() {
         return new UnitsViewpointAdapter(this);
     }
-    
+
     @Override
     protected Set<Class<? extends Annotation>> createSupportedTypeQualifiers() {
         // get all the loaded annotations
