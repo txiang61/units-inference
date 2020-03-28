@@ -66,10 +66,7 @@ public class Z3InferenceUnit {
                         UnitsZ3SmtEncoderUtils.z3VarName(
                                 slotID, UnitsZ3SmtEncoderUtils.ubSlotName));
 
-        slot.rdu =
-                ctx.mkBoolConst(
-                        UnitsZ3SmtEncoderUtils.z3VarName(
-                                slotID, UnitsZ3SmtEncoderUtils.rduSlotName));
+        slot.rdu = ctx.mkBool(false);
 
         slot.prefixExponent =
                 ctx.mkIntConst(

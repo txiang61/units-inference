@@ -2,7 +2,6 @@ package units;
 
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
-import javax.lang.model.type.TypeKind;
 import org.checkerframework.framework.type.AbstractViewpointAdapter;
 import org.checkerframework.framework.type.AnnotatedTypeFactory;
 import org.checkerframework.framework.type.AnnotatedTypeMirror;
@@ -21,12 +20,7 @@ public class UnitsViewpointAdapter extends AbstractViewpointAdapter {
 
     @Override
     protected boolean shouldAdaptMember(AnnotatedTypeMirror type, Element element) {
-        if (!(type.getKind() == TypeKind.DECLARED
-                || type.getKind() == TypeKind.ARRAY
-                || type.getKind().isPrimitive())) {
-            return false;
-        }
-        return super.shouldAdaptMember(type, element);
+        return false;
     }
 
     @Override

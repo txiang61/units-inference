@@ -584,6 +584,10 @@ public class UnitsRepresentationUtils {
             TypecheckUnit unit = createTypecheckUnit(slot.getValue());
             // System.err.println(unit);
 
+            if (unit.isRDUnits()) {
+                continue;
+            }
+
             serializePrefix = serializePrefix || (unit.getPrefixExponent() != 0);
 
             for (Entry<String, Integer> baseUnitExponents : unit.getExponents().entrySet()) {

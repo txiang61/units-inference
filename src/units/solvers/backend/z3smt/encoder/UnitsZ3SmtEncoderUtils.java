@@ -16,7 +16,6 @@ public class UnitsZ3SmtEncoderUtils {
     private static final char idComponentSeparator = '-';
     public static final String uuSlotName = "TOP";
     public static final String ubSlotName = "BOT";
-    public static final String rduSlotName = "RDU";
     public static final String prefixSlotName = "PREFIX";
 
     public static String z3VarName(int slotID, String component) {
@@ -128,6 +127,7 @@ public class UnitsZ3SmtEncoderUtils {
         BoolExpr allExponentsAreZero = allExponentsAreZero(ctx, unit);
         /* @formatter:off // this is for eclipse formatter */
         return ctx.mkAnd(
+                ctx.mkNot(unit.getRDUnits()),
                 ctx.mkNot(unit.getUnknownUnits()),
                 ctx.mkNot(unit.getUnitsBottom()),
                 allExponentsAreZero);
@@ -142,6 +142,7 @@ public class UnitsZ3SmtEncoderUtils {
         /* @formatter:off // this is for eclipse formatter */
         BoolExpr equalityEncoding =
                 ctx.mkAnd(
+                        ctx.mkEq(fst.getRDUnits(), snd.getRDUnits()),
                         ctx.mkEq(fst.getUnknownUnits(), snd.getUnknownUnits()),
                         ctx.mkEq(fst.getUnitsBottom(), snd.getUnitsBottom()));
         if (UnitsRepresentationUtils.getInstance().serializePrefix()) {

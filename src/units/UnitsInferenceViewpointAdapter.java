@@ -1,10 +1,14 @@
 package units;
 
+import checkers.inference.InferenceMain;
+import checkers.inference.model.ConstantSlot;
+import checkers.inference.model.Slot;
 import checkers.inference.util.InferenceViewpointAdapter;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
-import javax.lang.model.type.TypeKind;
 import org.checkerframework.framework.type.AnnotatedTypeFactory;
 import org.checkerframework.framework.type.AnnotatedTypeMirror;
+import org.checkerframework.javacutil.AnnotationUtils;
 import units.representation.UnitsRepresentationUtils;
 
 public class UnitsInferenceViewpointAdapter extends InferenceViewpointAdapter {
@@ -19,11 +23,20 @@ public class UnitsInferenceViewpointAdapter extends InferenceViewpointAdapter {
 
     @Override
     protected boolean shouldAdaptMember(AnnotatedTypeMirror type, Element element) {
-        if (!(type.getKind() == TypeKind.DECLARED
-                || type.getKind() == TypeKind.ARRAY
-                || type.getKind().isPrimitive())) {
-            return false;
+        return false;
+    }
+
+    @Override
+    protected AnnotationMirror combineAnnotationWithAnnotation(
+            AnnotationMirror receiverAnnotation, AnnotationMirror declaredAnnotation) {
+        Slot declSlot = InferenceMain.getInstance().getSlotManager().getSlot(declaredAnnotation);
+        if (declSlot.isConstant()) {
+            ConstantSlot cs = (ConstantSlot) declSlot;
+            if (AnnotationUtils.areSame(cs.getValue(), unitsRepUtils.RECEIVER_DEPENDANT_UNIT)) {
+                return super.combineAnnotationWithAnnotation(
+                        receiverAnnotation, declaredAnnotation);
+            }
         }
-        return super.shouldAdaptMember(type, element);
+        return declaredAnnotation;
     }
 }

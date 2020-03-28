@@ -60,6 +60,7 @@ public class UnitsZ3SmtFormatTranslator
 
         slotDeclaration.add(addZ3BoolDefinition(encodedSlot.getUnknownUnits()));
         slotDeclaration.add(addZ3BoolDefinition(encodedSlot.getUnitsBottom()));
+        slotDeclaration.add(addZ3BoolDefinition(encodedSlot.getRDUnits()));
 
         if (unitsRepUtils.serializePrefix()) {
             slotDeclaration.add(addZ3IntDefinition(encodedSlot.getPrefixExponent()));
@@ -138,8 +139,7 @@ public class UnitsZ3SmtFormatTranslator
             encodedSlot.setUnknownUnits(true);
         } else if (unit.isUnitsBottom()) {
             encodedSlot.setUnitsBottom(true);
-        }
-        if (unit.isRDUnits()) {
+        } else if (unit.isRDUnits()) {
             encodedSlot.setRDUnits(true);
         } else {
             encodedSlot.setPrefixExponent(unit.getPrefixExponent());
@@ -229,8 +229,6 @@ public class UnitsZ3SmtFormatTranslator
                 z3Slot.setUnknownUnits(Boolean.parseBoolean(value));
             } else if (component.contentEquals(UnitsZ3SmtEncoderUtils.ubSlotName)) {
                 z3Slot.setUnitsBottom(Boolean.parseBoolean(value));
-            } else if (component.contentEquals(UnitsZ3SmtEncoderUtils.rduSlotName)) {
-                z3Slot.setRDUnits(Boolean.parseBoolean(value));
             } else if (component.contentEquals(UnitsZ3SmtEncoderUtils.prefixSlotName)) {
                 z3Slot.setPrefixExponent(Integer.parseInt(value));
             } else {

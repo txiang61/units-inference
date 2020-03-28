@@ -5,11 +5,6 @@ class PolyUnitClass {
     @PolyUnit PolyUnitClass(@PolyUnit int x) {}
 }
 
-class MeterClass {
-    // :: error: (super.invocation.invalid)
-    @m MeterClass(@m int x) {}
-}
-
 class NoAnnotClass {
     NoAnnotClass(int x) {}
 }
@@ -37,10 +32,10 @@ class Constructors {
     }
 
     void nonPolyConstructorTest() {
-        // :: fixable-error: (argument.type.incompatible)
-        @m MeterClass mc1 = new MeterClass(5);
-        // :: fixable-error: (argument.type.incompatible)
-        @m MeterClass mc2 = new @m MeterClass(5);
+        // :: fixable-error: (assignment.type.incompatible)
+        @m Integer mc1 = new Integer(5);
+        // :: fixable-error: (constructor.invocation.invalid)
+        @m Integer mc2 = new @m Integer(5);
 
         @Dimensionless NoAnnotClass na1 = new NoAnnotClass(5);
     }

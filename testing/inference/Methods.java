@@ -14,11 +14,20 @@ class Methods {
         return x;
     }
 
+    int method(int x) {
+        return x;
+    }
+
+    void testMethod() {
+        // :: fixable-error: (assignment.type.incompatible)
+        @m int num = method(5);
+    }
+
     void polyUnitMethodTest() {
         // :: fixable-error: (assignment.type.incompatible)
         @m int pum1 = polyUnitMethod(5);
 
-        int pum2 = polyUnitMethod(5 * UnitsTools.m);
+        @m int pum2 = polyUnitMethod(5 * UnitsTools.m);
 
         // :: fixable-error: (assignment.type.incompatible)
         @m int pum3 = polyUnitMethod(5, 6);

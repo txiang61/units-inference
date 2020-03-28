@@ -40,6 +40,8 @@ import org.checkerframework.framework.type.AnnotatedTypeMirror.AnnotatedExecutab
 import org.checkerframework.framework.type.AnnotationClassLoader;
 import org.checkerframework.framework.type.DefaultAnnotatedTypeFormatter;
 import org.checkerframework.framework.type.QualifierHierarchy;
+import org.checkerframework.framework.type.treeannotator.ListTreeAnnotator;
+import org.checkerframework.framework.type.treeannotator.TreeAnnotator;
 import org.checkerframework.framework.util.AnnotatedTypes;
 import org.checkerframework.framework.util.AnnotationFormatter;
 import org.checkerframework.framework.util.MultiGraphQualifierHierarchy.MultiGraphFactory;
@@ -383,12 +385,12 @@ public class UnitsInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeFa
         }
     }
 
-    //    @Override
-    //    public TreeAnnotator createTreeAnnotator() {
-    //        return new ListTreeAnnotator(
-    //                new UnitsInferenceTreeAnnotator(
-    //                        this, realChecker, realTypeFactory, variableAnnotator, slotManager));
-    //    }
+    @Override
+    public TreeAnnotator createTreeAnnotator() {
+        return new ListTreeAnnotator(
+                new UnitsInferenceTreeAnnotator(
+                        this, realChecker, realTypeFactory, variableAnnotator, slotManager));
+    }
 
     private final class UnitsInferenceTreeAnnotator extends InferenceTreeAnnotator {
         // TODO: per design of InferenceTreeAnnotator, this code should be moved into

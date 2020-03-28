@@ -21,6 +21,8 @@ public class TypecheckUnit {
         uu = false;
         // default UU value is false
         ub = false;
+        // default RDU value is false
+        rdu = false;
         // default prefixExponent is 0
         prefixExponent = 0;
         // default exponents are 0

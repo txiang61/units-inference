@@ -38,7 +38,8 @@ public class UnitsZ3SmtCombineConstraintEncoder
     @Override
     public BoolExpr encodeVariable_Variable(
             VariableSlot target, VariableSlot declared, VariableSlot result) {
-        return receiver_dependent(target, declared, result);
+        return ctx.mkTrue();
+        //        return receiver_dependent(target, declared, result);
     }
 
     @Override
@@ -50,7 +51,8 @@ public class UnitsZ3SmtCombineConstraintEncoder
     @Override
     public BoolExpr encodeConstant_Variable(
             ConstantSlot target, VariableSlot declared, VariableSlot result) {
-        return receiver_dependent(target, declared, result);
+        return ctx.mkTrue();
+        //        return receiver_dependent(target, declared, result);
     }
 
     @Override
