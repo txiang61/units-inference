@@ -291,8 +291,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                 return true;
             }
 
-            // Case: @RDU shouldn't appear.
-            // TODO: throw error?
+            // Case: @RDU shouldn't appear. throw error?
             if (AnnotationUtils.areSame(subAnno, unitsRepUtils.RECEIVER_DEPENDANT_UNIT)) {
                 return isSubtype(unitsRepUtils.TOP, superAnno);
             }

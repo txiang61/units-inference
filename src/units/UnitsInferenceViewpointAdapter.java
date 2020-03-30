@@ -29,6 +29,9 @@ public class UnitsInferenceViewpointAdapter extends InferenceViewpointAdapter {
     @Override
     protected AnnotationMirror combineAnnotationWithAnnotation(
             AnnotationMirror receiverAnnotation, AnnotationMirror declaredAnnotation) {
+        if (InferenceMain.isHackMode(declaredAnnotation == null)) {
+            return declaredAnnotation;
+        }
         Slot declSlot = InferenceMain.getInstance().getSlotManager().getSlot(declaredAnnotation);
         if (declSlot.isConstant()) {
             ConstantSlot cs = (ConstantSlot) declSlot;
