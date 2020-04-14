@@ -6,6 +6,7 @@ import units.qual.*;
 class JavaUtilConcurrentTimeUnit {
 
     void test(long time, TimeUnit unit) throws Exception {
+        // :: fixable-error: (argument.type.incompatible)
         long milliseconds = unit.toMillis(time);
         Thread.sleep(milliseconds);
     }

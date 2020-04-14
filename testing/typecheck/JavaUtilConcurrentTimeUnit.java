@@ -23,6 +23,7 @@ class JavaUtilConcurrentTimeUnit {
     }
 
     void test(long time, TimeUnit unit) throws Exception {
+        // :: error: (argument.type.incompatible)
         @ms long milliseconds = unit.toMillis(time);
         Thread.sleep(milliseconds);
     }

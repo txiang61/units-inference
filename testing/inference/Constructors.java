@@ -5,6 +5,10 @@ class PolyUnitClass {
     @PolyUnit PolyUnitClass(@PolyUnit int x) {}
 }
 
+class MeterClass {
+    @m MeterClass(@m int x) {}
+}
+
 class NoAnnotClass {
     NoAnnotClass(int x) {}
 }
@@ -21,21 +25,21 @@ class Constructors {
         PolyUnitClass puc2 = new PolyUnitClass(5 * UnitsTools.m);
 
         // propagate @m from constructor return type
-        // :: fixable-error: (constructor.invocation.invalid)
+        // :: fixable-warning: (cast.unsafe.constructor.invocation)
         PolyUnitClass puc3 = new @m PolyUnitClass(5);
 
-        // :: fixable-error: (constructor.invocation.invalid)
+        // :: fixable-warning: (cast.unsafe.constructor.invocation)
         @m PolyUnitClass puc4 = new @m PolyUnitClass(5);
 
-        // :: fixable-error: (constructor.invocation.invalid)
+        // :: fixable-warning: (cast.unsafe.constructor.invocation)
         PolyUnitClass puc5 = new @m PolyUnitClass(5 * UnitsTools.s);
     }
 
     void nonPolyConstructorTest() {
-        // :: fixable-error: (assignment.type.incompatible)
-        @m Integer mc1 = new Integer(5);
-        // :: fixable-error: (constructor.invocation.invalid)
-        @m Integer mc2 = new @m Integer(5);
+        // :: fixable-error: (argument.type.incompatible)
+        @m MeterClass mc1 = new MeterClass(5);
+        // :: fixable-error: (argument.type.incompatible)
+        @m MeterClass mc2 = new @m MeterClass(5);
 
         @Dimensionless NoAnnotClass na1 = new NoAnnotClass(5);
     }

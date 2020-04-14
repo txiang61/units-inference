@@ -27,7 +27,7 @@ class Methods {
         // :: fixable-error: (assignment.type.incompatible)
         @m int pum1 = polyUnitMethod(5);
 
-        @m int pum2 = polyUnitMethod(5 * UnitsTools.m);
+        int pum2 = polyUnitMethod(5 * UnitsTools.m);
 
         // :: fixable-error: (assignment.type.incompatible)
         @m int pum3 = polyUnitMethod(5, 6);

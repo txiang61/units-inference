@@ -243,7 +243,7 @@ public class UnitsInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeFa
                 return result;
             }
 
-            if (annos1.isEmpty()) {
+            if (annos1.isEmpty() || annos2.isEmpty()) {
                 throw new BugInCF(
                         "QualifierHierarchy.leastUpperBounds: tried to determine LUB with empty sets");
             }
@@ -257,21 +257,8 @@ public class UnitsInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeFa
                     }
                 }
             }
-            
-            return result;
 
-//            if (annos1.size() == result.size() || annos2.size() == result.size()) {
-//                return result;
-//            } else {
-//                throw new BugInCF(
-//                        "QualifierHierarchy.leastUpperBounds: resulting set has incorrect number of annotations.\n"
-//                                + "    Set 1: "
-//                                + annos1
-//                                + " Set 2: "
-//                                + annos2
-//                                + " LUB: "
-//                                + result);
-//            }
+            return result;
         }
 
         //        @Override
