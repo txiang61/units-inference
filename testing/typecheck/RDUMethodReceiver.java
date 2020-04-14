@@ -2,10 +2,7 @@ import units.qual.*;
 
 public class RDUMethodReceiver {
 
-    public class MeterClass {
-        // :: error: (super.invocation.invalid)
-        public @m MeterClass() {}
-
+    @m public class MeterClass {
         @RDU
         Object get(@m MeterClass this) {
             return null;
@@ -16,10 +13,7 @@ public class RDUMethodReceiver {
         }
     }
 
-    public class SecondClass {
-        // :: error: (super.invocation.invalid)
-        public @s SecondClass() {}
-
+    @s public class SecondClass {
         @RDU
         Object get(@s SecondClass this) {
             return null;

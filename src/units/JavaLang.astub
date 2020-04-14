@@ -2,6 +2,9 @@ import units.qual.*;
 
 package java.lang;
 
+@UnitsBottom class Object{
+}
+
 class System {
     static @ms long currentTimeMillis();
     static @ns long nanoTime();

@@ -2,6 +2,7 @@ import units.qual.*;
 
 package java.util.concurrent;
 
+@UnitsBottom
 enum TimeUnit {
     @ns NANOSECONDS,
     @us MICROSECONDS,

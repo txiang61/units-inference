@@ -30,7 +30,7 @@ public class UnitsInferenceViewpointAdapter extends InferenceViewpointAdapter {
     protected AnnotationMirror combineAnnotationWithAnnotation(
             AnnotationMirror receiverAnnotation, AnnotationMirror declaredAnnotation) {
         if (InferenceMain.isHackMode(declaredAnnotation == null)) {
-            return unitsRepUtils.DIMENSIONLESS;
+            return unitsRepUtils.BOTTOM;
         }
         Slot declSlot = InferenceMain.getInstance().getSlotManager().getSlot(declaredAnnotation);
         if (declSlot.isConstant()) {

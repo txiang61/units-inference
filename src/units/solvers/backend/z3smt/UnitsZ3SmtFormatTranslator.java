@@ -169,6 +169,7 @@ public class UnitsZ3SmtFormatTranslator
 
     @Override
     public BoolExpr encodeSlotWellformnessConstraint(VariableSlot slot) {
+        Z3InferenceUnit serializedSlot = slot.serialize(this);
         if (slot instanceof ConstantSlot) {
             ConstantSlot cs = (ConstantSlot) slot;
             AnnotationMirror anno = cs.getValue();
@@ -176,9 +177,10 @@ public class UnitsZ3SmtFormatTranslator
             if (AnnotationUtils.areSame(anno, unitsRepUtils.POLYUNIT)) {
                 return ctx.mkTrue();
             }
+            if (AnnotationUtils.areSame(anno, unitsRepUtils.RECEIVER_DEPENDANT_UNIT)) {
+                return serializedSlot.getRDUnits();
+            }
         }
-
-        Z3InferenceUnit serializedSlot = slot.serialize(this);
         return UnitsZ3SmtEncoderUtils.slotWellformedness(ctx, serializedSlot);
     }
 
