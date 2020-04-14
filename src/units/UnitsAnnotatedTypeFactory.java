@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.util.Elements;
 import org.checkerframework.common.basetype.BaseAnnotatedTypeFactory;
 import org.checkerframework.common.basetype.BaseTypeChecker;
 import org.checkerframework.framework.qual.LiteralKind;
@@ -149,6 +150,34 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                 unitsRepUtils.DIMENSIONLESS, TypeUseLocation.EXCEPTION_PARAMETER);
         // set TOP as the default qualifier for local variables, for dataflow refinement
         defs.addCheckedCodeDefault(unitsRepUtils.TOP, TypeUseLocation.LOCAL_VARIABLE);
+    }
+
+    @Override
+    protected QualifierDefaults createQualifierDefaults() {
+        return new UnitsQualifierDefaults(elements, this);
+    }
+
+    private class UnitsQualifierDefaults extends QualifierDefaults {
+
+        public UnitsQualifierDefaults(Elements elements, AnnotatedTypeFactory atypeFactory) {
+            super(elements, atypeFactory);
+        }
+
+        public void addUncheckedStandardDefaults() {
+            super.addUncheckedStandardDefaults();
+
+            // experiment with:
+            // This seems to have no effect thus far in the constraints generated in inference
+            // top param, receiver, bot return for inference, explain unsat
+            addUncheckedCodeDefault(unitsRepUtils.TOP, TypeUseLocation.RECEIVER);
+            addUncheckedCodeDefault(unitsRepUtils.TOP, TypeUseLocation.PARAMETER);
+            addUncheckedCodeDefault(unitsRepUtils.BOTTOM, TypeUseLocation.RETURN);
+
+            // bot param, top return for tightest api restriction??
+
+            // dimensionless is default for all other locations
+            // addUncheckedCodeDefault(unitsRepUtils.DIMENSIONLESS, TypeUseLocation.OTHERWISE);
+        }
     }
 
     @Override
