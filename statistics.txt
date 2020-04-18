@@ -1,0 +1,14 @@
+====================== Statistics =======================
+serialize_prefix: 0
+serialize_baseunits: 0
+smt_serialization_time(millisec): 53
+smt_solving_time(millisec): 21
+total_slots: 44
+total_variable_slots: 38
+constantslot: 6
+variableslot: 23
+existentialvariableslot: 15
+total_constraints: 4
+existentialconstraint: 2
+subtypeconstraint: 2
+=========================================================

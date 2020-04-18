@@ -19,6 +19,7 @@ import org.checkerframework.framework.type.AnnotatedTypeMirror;
 import org.checkerframework.framework.type.AnnotationClassLoader;
 import org.checkerframework.framework.type.DefaultAnnotatedTypeFormatter;
 import org.checkerframework.framework.type.QualifierHierarchy;
+import org.checkerframework.framework.type.ViewpointAdapter;
 import org.checkerframework.framework.type.treeannotator.ListTreeAnnotator;
 import org.checkerframework.framework.type.treeannotator.LiteralTreeAnnotator;
 import org.checkerframework.framework.type.treeannotator.PropagationTreeAnnotator;
@@ -81,6 +82,11 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
     }
 
     @Override
+    protected ViewpointAdapter createViewpointAdapter() {
+        return new UnitsViewpointAdapter(this);
+    }
+
+    @Override
     public AnnotationMirror canonicalAnnotation(AnnotationMirror anno) {
         // check to see if it is an internal units annotation
         if (AnnotationUtils.areSameByClass(anno, UnitsRep.class)) {
@@ -112,7 +118,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
     @Override
     public boolean isSupportedQualifier(AnnotationMirror anno) {
         /*
-         * getQualifierHierarchy().getTypeQualifiers() contains PolyAll, PolyUnit, and the AMs of
+         * getQualifierHierarchy().getTypeQualifiers() contains PolyUnit, and the AMs of
          * Top and Bottom. We need to check all other instances of @UnitsRep AMs that are
          * supported qualifiers here.
          */
@@ -122,7 +128,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
         if (AnnotationUtils.areSameByClass(anno, UnitsRep.class)) {
             return unitsRepUtils.hasAllBaseUnits(anno);
         }
-        // Anno is PolyAll, PolyUnit
+        // Anno is PolyUnit
         return AnnotationUtils.containsSame(this.getQualifierHierarchy().getTypeQualifiers(), anno);
     }
 
@@ -144,28 +150,6 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                 unitsRepUtils.DIMENSIONLESS, TypeUseLocation.EXCEPTION_PARAMETER);
         // set TOP as the default qualifier for local variables, for dataflow refinement
         defs.addCheckedCodeDefault(unitsRepUtils.TOP, TypeUseLocation.LOCAL_VARIABLE);
-    }
-
-    // Note: remember to use
-    // --cfArgs="-AuseDefaultsForUncheckedCode=source,bytecode" in cmd line option
-    // -AuseDefaultsForUncheckedCode=bytecode // uses those defaults in byte code
-    // -AuseDefaultsForUncheckedCode=source,bytecode // also uses those defaults in
-    // source code
-    @Override
-    protected void addUncheckedCodeDefaults(QualifierDefaults defs) {
-        super.addUncheckedCodeDefaults(defs);
-
-        // experiment with:
-        // This seems to have no effect thus far in the constraints generated in inference
-        // top param, receiver, bot return for inference, explain unsat
-        defs.addUncheckedCodeDefault(unitsRepUtils.TOP, TypeUseLocation.RECEIVER);
-        defs.addUncheckedCodeDefault(unitsRepUtils.TOP, TypeUseLocation.PARAMETER);
-        defs.addUncheckedCodeDefault(unitsRepUtils.BOTTOM, TypeUseLocation.RETURN);
-
-        // bot param, top return for tightest api restriction??
-
-        // dimensionless is default for all other locations
-        // defs.addUncheckedCodeDefault(unitsRepUtils.DIMENSIONLESS, TypeUseLocation.OTHERWISE);
     }
 
     @Override
@@ -262,6 +246,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
 
             // Update tops
             tops.remove(unitsRepUtils.RAWUNITSREP);
+            tops.remove(unitsRepUtils.RECEIVER_DEPENDANT_UNIT);
             tops.add(unitsRepUtils.TOP);
 
             // System.err.println(" === Typecheck ATF ");
@@ -304,6 +289,14 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                 return isSubtype(unitsRepUtils.TOP, superAnno);
             }
             if (AnnotationUtils.areSame(superAnno, unitsRepUtils.POLYUNIT)) {
+                return true;
+            }
+
+            // Case: @RDU shouldn't appear. throw error?
+            if (AnnotationUtils.areSame(subAnno, unitsRepUtils.RECEIVER_DEPENDANT_UNIT)) {
+                return isSubtype(unitsRepUtils.TOP, superAnno);
+            }
+            if (AnnotationUtils.areSame(superAnno, unitsRepUtils.RECEIVER_DEPENDANT_UNIT)) {
                 return true;
             }
 

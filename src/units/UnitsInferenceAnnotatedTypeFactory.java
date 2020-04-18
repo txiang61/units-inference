@@ -14,6 +14,7 @@ import checkers.inference.model.ConstraintManager;
 import checkers.inference.model.Slot;
 import checkers.inference.model.VariableSlot;
 import checkers.inference.qual.VarAnnot;
+import checkers.inference.util.InferenceViewpointAdapter;
 import com.sun.source.tree.BinaryTree;
 import com.sun.source.tree.ExpressionTree;
 import com.sun.source.tree.IdentifierTree;
@@ -110,6 +111,11 @@ public class UnitsInferenceAnnotatedTypeFactory extends InferenceAnnotatedTypeFa
         // qualSet.addAll(externalQualsMap.values());
 
         return qualSet;
+    }
+
+    @Override
+    protected InferenceViewpointAdapter createViewpointAdapter() {
+        return new UnitsInferenceViewpointAdapter(this);
     }
 
     // In Inference ATF, this returns the alias for a given real qualifier
