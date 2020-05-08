@@ -27,5 +27,8 @@ class StringBuilder implements Serializable, CharSequence {
     StringBuilder append(@UnknownUnits float f);
     StringBuilder append(@UnknownUnits double b);
     StringBuilder append(@UnknownUnits char c);
+    StringBuilder append(@UnknownUnits char[] str);
+    StringBuilder append(@UnknownUnits String str);
+    StringBuilder append(@UnknownUnits Object obj);
 }
 

@@ -81,10 +81,10 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
         return qualSet;
     }
 
-    @Override
-    protected ViewpointAdapter createViewpointAdapter() {
-        return new UnitsViewpointAdapter(this);
-    }
+//    @Override
+//    protected ViewpointAdapter createViewpointAdapter() {
+//        return new UnitsViewpointAdapter(this);
+//    }
 
     @Override
     public AnnotationMirror canonicalAnnotation(AnnotationMirror anno) {
@@ -142,7 +142,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
         // defs.addCheckedCodeDefault(unitsRepUtils.DIMENSIONLESS, TypeUseLocation.UPPER_BOUND);
         defs.addCheckedCodeDefault(
                 unitsRepUtils.DIMENSIONLESS, TypeUseLocation.EXPLICIT_UPPER_BOUND);
-        defs.addCheckedCodeDefault(unitsRepUtils.TOP, TypeUseLocation.IMPLICIT_UPPER_BOUND);
+        defs.addCheckedCodeDefault(unitsRepUtils.DIMENSIONLESS, TypeUseLocation.IMPLICIT_UPPER_BOUND);
         // defaults for lower bounds is BOTTOM, individual bounds can be manually set
         defs.addCheckedCodeDefault(unitsRepUtils.BOTTOM, TypeUseLocation.LOWER_BOUND);
         // exceptions are always dimensionless

@@ -20,6 +20,8 @@ import units.representation.UnitsRepresentationUtils;
     "JavaThread.astub",
     "JavaUtil.astub",
     "JavaText.astub",
+    "JavaNioFile.astub",
+    "JavolutionMathLib.astub",
     "JavaUtilConcurrent.astub", // for ode4j, not yet annotated for hombucha
     "JavaAWT.astub", // for josm
     "JavaAWTGeom.astub", // for josm, imgscalr
