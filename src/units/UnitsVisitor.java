@@ -19,7 +19,6 @@ import com.sun.source.tree.UnaryTree;
 import java.util.Set;
 import javax.lang.model.element.AnnotationMirror;
 import org.checkerframework.common.basetype.BaseAnnotatedTypeFactory;
-import org.checkerframework.framework.source.Result;
 import org.checkerframework.framework.type.AnnotatedTypeMirror;
 import org.checkerframework.javacutil.AnnotationUtils;
 import org.checkerframework.javacutil.TreeUtils;
@@ -226,14 +225,11 @@ public class UnitsVisitor extends InferenceVisitor<UnitsChecker, BaseAnnotatedTy
                 // comparable constraint: lhs <: rhs, or rhs <: lhs
                 if (!(atypeFactory.getQualifierHierarchy().isSubtype(lhsAM, rhsAM)
                         || atypeFactory.getQualifierHierarchy().isSubtype(rhsAM, lhsAM))) {
-                    checker.reportError(binaryTree,
-                                    "comparison.unit.mismatch",
-                                    atypeFactory
-                                            .getAnnotationFormatter()
-                                            .formatAnnotationMirror(lhsAM),
-                                    atypeFactory
-                                            .getAnnotationFormatter()
-                                            .formatAnnotationMirror(rhsAM));
+                    checker.reportError(
+                            binaryTree,
+                            "comparison.unit.mismatch",
+                            atypeFactory.getAnnotationFormatter().formatAnnotationMirror(lhsAM),
+                            atypeFactory.getAnnotationFormatter().formatAnnotationMirror(rhsAM));
                 }
                 // if (!AnnotationUtils.areSame(lhsAM, rhsAM)) {
                 // }
@@ -267,10 +263,11 @@ public class UnitsVisitor extends InferenceVisitor<UnitsChecker, BaseAnnotatedTy
                             .getEffectiveAnnotationInHierarchy(
                                     UnitsRepresentationUtils.getInstance().TOP);
 
-            // If expression type is dimensionless or UnknownUnits, permit it to be casted to anything
+            // If expression type is dimensionless or UnknownUnits, permit it to be casted to
+            // anything
             if (UnitsTypecheckUtils.unitsEqual(
-                    exprType, UnitsRepresentationUtils.getInstance().DIMENSIONLESS)
-            		|| UnitsTypecheckUtils.unitsEqual(
+                            exprType, UnitsRepresentationUtils.getInstance().DIMENSIONLESS)
+                    || UnitsTypecheckUtils.unitsEqual(
                             exprType, UnitsRepresentationUtils.getInstance().TOP)) {
                 if (atypeFactory.getDependentTypesHelper() != null) {
                     AnnotatedTypeMirror type = atypeFactory.getAnnotatedType(node);

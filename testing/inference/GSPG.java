@@ -1,41 +1,29 @@
-/**
- * SeriesParallelGraph.java
- *
- */
+/** SeriesParallelGraph.java */
 package ds.graph;
 
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import org.apache.commons.math3.util.Pair;
 
-/**
- *
- * @author Martin Groß
- */
-public class GSPG<N,E extends AbstractEdge<N>> extends DynamicNetwork<N,E> implements Planar {
+/** @author Martin Groß */
+public class GSPG<N, E extends AbstractEdge<N>> extends DynamicNetwork<N, E> implements Planar {
 
-    /**
-     * The series-parallel decomposition.
-     */
-    private BinaryTree<Pair<GSPCompositionType,E>> decomposition;
-    /**
-     * The second terminal.
-     */
+    /** The series-parallel decomposition. */
+    private BinaryTree<Pair<GSPCompositionType, E>> decomposition;
+    /** The second terminal. */
     private N sink;
-    /**
-     * The first terminal.
-     */
+    /** The first terminal. */
     private N source;
 
     /**
-     * Creates a new minimum generalized series-parallel graph, i.e. an edge
-     * connecting two terminals, using the specified factories to generate nodes
-     * and edges.
+     * Creates a new minimum generalized series-parallel graph, i.e. an edge connecting two
+     * terminals, using the specified factories to generate nodes and edges.
+     *
      * @param nodeFactory the factory for nodes.
      * @param edgeFactory the factory for edges.
      */
-    public GSPG(Supplier<N> nodeFactory, BiFunction<N,N,E> edgeFactory) {
-        super(edgeFactory);        
+    public GSPG(Supplier<N> nodeFactory, BiFunction<N, N, E> edgeFactory) {
+        super(edgeFactory);
         source = nodeFactory.get();
         sink = nodeFactory.get();
         E edge = edgeFactory.apply(source, sink);
@@ -48,16 +36,18 @@ public class GSPG<N,E extends AbstractEdge<N>> extends DynamicNetwork<N,E> imple
     }
 
     /**
-     * Creates a new generalized series-parallel graph from the composition of
-     * two generalized series-parallel graphs.
+     * Creates a new generalized series-parallel graph from the composition of two generalized
+     * series-parallel graphs.
+     *
      * @param type the type of the composition.
      * @param spg1
      * @param spg2
      */
-    public GSPG(GSPCompositionType type, GSPG<N,E> spg1, GSPG<N,E> spg2) {
+    public GSPG(GSPCompositionType type, GSPG<N, E> spg1, GSPG<N, E> spg2) {
         super(spg1.edgeFactory);
         if (type == GSPCompositionType.EDGE) {
-            throw new IllegalArgumentException("This type is no composition and cannot be used here.");
+            throw new IllegalArgumentException(
+                    "This type is no composition and cannot be used here.");
         }
         addGraph(spg1);
         addGraph(spg2);
@@ -81,21 +71,25 @@ public class GSPG<N,E extends AbstractEdge<N>> extends DynamicNetwork<N,E> imple
             default:
                 throw new AssertionError("This should not happen.");
         }
-        decomposition = new BinaryTree<>(new Pair(type,null),spg1.getDecomposition(),spg2.getDecomposition());
+        decomposition =
+                new BinaryTree<>(
+                        new Pair(type, null), spg1.getDecomposition(), spg2.getDecomposition());
         assert containsNode(source);
         assert containsNode(sink);
     }
 
     /**
      * Returns the decomposition tree of the graph.
+     *
      * @return
      */
-    public BinaryTree<Pair<GSPCompositionType,E>> getDecomposition() {
+    public BinaryTree<Pair<GSPCompositionType, E>> getDecomposition() {
         return decomposition;
     }
 
     /**
      * Returns the sink, i.e., the second terminal of the network.
+     *
      * @return the sink, i.e., the second terminal of the network.
      */
     public N getSink() {
@@ -104,22 +98,24 @@ public class GSPG<N,E extends AbstractEdge<N>> extends DynamicNetwork<N,E> imple
 
     /**
      * Returns the source, i.e., the first terminal of the network.
+     *
      * @return the source, i.e., the first terminal of the network.
-     */    
+     */
     public N getSource() {
         return source;
     }
 
     /**
-     * Replaces an edge by the given generalized series-parallel graph. The end-
-     * points of the edge are identified with the terminals of the given GSPG.
+     * Replaces an edge by the given generalized series-parallel graph. The end- points of the edge
+     * are identified with the terminals of the given GSPG.
+     *
      * @param edge the edge to be replaced.
      * @param graph the graph that replaces the edge.
      */
-    public GSPG<N,E> replaceEdge(E edge, GSPG<N,E> graph) {
+    public GSPG<N, E> replaceEdge(E edge, GSPG<N, E> graph) {
         return null;
     }
-    
+
     /*
     public static boolean isSeriesParallel(DynamicNetwork n, IdentifiableObjectMapping<Node, XMLIntersection> nodeIntersections, IdentifiableObjectMapping<Edge, XMLConnection> edgeConnections) {
         DynamicNetwork network = new DynamicNetwork(n);
@@ -162,7 +158,7 @@ public class GSPG<N,E extends AbstractEdge<N>> extends DynamicNetwork<N,E> imple
                 }
                 if (network.degree(node2) == 1 || network.degree(node2) == 2) {
                     nodeQueue.add(node2);
-                }                
+                }
             }
 
             if (network.degree(node) == 1) {
@@ -190,7 +186,7 @@ public class GSPG<N,E extends AbstractEdge<N>> extends DynamicNetwork<N,E> imple
             }
         }
 
-        
+
          System.out.println("\\begin{figure}[p]\\centering\\begin{tikzpicture}");
          for (Node node : network.nodes()) {
          XMLIntersection intersection = nodeIntersections.get(node);
@@ -205,7 +201,7 @@ public class GSPG<N,E extends AbstractEdge<N>> extends DynamicNetwork<N,E> imple
          }
          System.out.println("\\end{tikzpicture}\\end{figure}");
          System.out.println("");
-         
+
         System.out.println(network.numberOfNodes());
         for (Node node : network.nodes()) {
             if (network.degree(node) < 3) {

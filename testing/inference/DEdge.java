@@ -1,14 +1,7 @@
-/**
- * DEdge.java
- *
- */
-
+/** DEdge.java */
 package ds.graph;
 
-/**
- *
- * @author Martin Groß
- */
+/** @author Martin Groß */
 public class DEdge extends AbstractEdge<DNode> {
 
     public DEdge(DNode start, DNode end) {
@@ -16,6 +9,6 @@ public class DEdge extends AbstractEdge<DNode> {
     }
 
     public static DEdge createEdge(DNode v, DNode w) {
-        return new DEdge(v,w);
+        return new DEdge(v, w);
     }
 }

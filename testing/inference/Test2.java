@@ -37,7 +37,7 @@ class Test2<E extends Identifiable> {
     private Class<? extends Identifiable> elementType;
     private E[] elements;
 
-    public Test2( E[] elements ) {
+    public Test2(E[] elements) {
         this.elementType = elements[0].getClass();
     }
 }

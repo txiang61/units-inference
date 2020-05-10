@@ -1,4 +1,1 @@
-
-public class GasNode {
-
-}
+public class GasNode {}

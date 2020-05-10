@@ -1,11 +1,20 @@
-import java.nio.file.Files;
-import java.nio.file.Path;
+import units.qual.*;
+import java.lang.reflect.Field;
 
-class Test3<E extends Identifiable> {
-	private Class<? extends Identifiable> elementType;
-	private E[] elements;
+class Test3 {
 
-	public Test3( E[] elements ) {
-		this.elementType = elements[0].getClass();
-	}
+    int test() {
+        int i = val();
+        Integer i2 = new Integer(i);
+        return i2;
+    }
+
+    int val() {
+    	return 0;
+    }
+
+    // long test2(Object obj) {
+    // 	Object fieldObj = obj;
+    //     return ((Long)fieldObj).longValue();
+    // }
 }

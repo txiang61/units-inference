@@ -12,8 +12,12 @@ import java.lang.annotation.Target;
  * @checker_framework.manual #units-checker Units Checker
  */
 @UnitsAlias(
-		prefixExponent = 3,
-		baseUnitComponents = {@BUC(unit = "g", exponent = 1),  @BUC(unit = "m", exponent = 2), @BUC(unit = "s", exponent = -3)})
+        prefixExponent = 3,
+        baseUnitComponents = {
+            @BUC(unit = "g", exponent = 1),
+            @BUC(unit = "m", exponent = 2),
+            @BUC(unit = "s", exponent = -3)
+        })
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE_USE, ElementType.TYPE_PARAMETER})

@@ -1,4 +1,3 @@
-
 public class GasEdge extends AbstractEdge<Number> {
 
     public GasEdge(Number start, Number end) {

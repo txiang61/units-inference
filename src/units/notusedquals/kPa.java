@@ -14,8 +14,12 @@ import units.qual.UnitsAlias;
  * @checker_framework.manual #units-checker Units Checker
  */
 @UnitsAlias(
-		prefixExponent = 6,
-		baseUnitComponents = {@BUC(unit = "g", exponent = 1),  @BUC(unit = "m", exponent = -1), @BUC(unit = "s", exponent = -2)})
+        prefixExponent = 6,
+        baseUnitComponents = {
+            @BUC(unit = "g", exponent = 1),
+            @BUC(unit = "m", exponent = -1),
+            @BUC(unit = "s", exponent = -2)
+        })
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE_USE, ElementType.TYPE_PARAMETER})
