@@ -263,12 +263,10 @@ public class UnitsVisitor extends InferenceVisitor<UnitsChecker, BaseAnnotatedTy
                             .getEffectiveAnnotationInHierarchy(
                                     UnitsRepresentationUtils.getInstance().TOP);
 
-            // If expression type is dimensionless or UnknownUnits, permit it to be casted to
+            // If expression type is dimensionless, permit it to be casted to
             // anything
             if (UnitsTypecheckUtils.unitsEqual(
-                            exprType, UnitsRepresentationUtils.getInstance().DIMENSIONLESS)
-                    || UnitsTypecheckUtils.unitsEqual(
-                            exprType, UnitsRepresentationUtils.getInstance().TOP)) {
+                    exprType, UnitsRepresentationUtils.getInstance().DIMENSIONLESS)) {
                 if (atypeFactory.getDependentTypesHelper() != null) {
                     AnnotatedTypeMirror type = atypeFactory.getAnnotatedType(node);
                     atypeFactory.getDependentTypesHelper().checkType(type, node.getType());

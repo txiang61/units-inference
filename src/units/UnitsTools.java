@@ -82,9 +82,9 @@ public class UnitsTools {
     public static @K double C_to_K(@C double C) {
         return C + 273.15;
     }
-    
+
     public static @ms double s_to_ms(@s double s) {
-    	return s * 1000;
+        return s * 1000;
     }
 
     // Constants
