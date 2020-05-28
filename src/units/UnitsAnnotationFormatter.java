@@ -47,7 +47,7 @@ public class UnitsAnnotationFormatter extends DefaultAnnotationFormatter {
             sb.append(av.toString());
             // this is the new case added
             // if the argument is an AnnotationMirror, then recursively format the AnnotationMirror
-            // formatAnnotationMirror((AnnotationMirror) val, sb);
+            formatAnnotationMirror((AnnotationMirror) val, sb);
         } else {
             sb.append(av.toString());
         }

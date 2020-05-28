@@ -81,10 +81,10 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
         return qualSet;
     }
 
-//    @Override
-//    protected ViewpointAdapter createViewpointAdapter() {
-//        return new UnitsViewpointAdapter(this);
-//    }
+    @Override
+    protected ViewpointAdapter createViewpointAdapter() {
+        return new UnitsViewpointAdapter(this);
+    }
 
     @Override
     public AnnotationMirror canonicalAnnotation(AnnotationMirror anno) {
