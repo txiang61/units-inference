@@ -129,7 +129,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
             return unitsRepUtils.hasAllBaseUnits(anno);
         }
         // Anno is PolyUnit
-        return AnnotationUtils.containsSame(this.getQualifierHierarchy().getTypeQualifiers(), anno);
+        return getSupportedTypeQualifierNames().contains(anno.toString());
     }
 
     // Programmatically set the qualifier defaults
