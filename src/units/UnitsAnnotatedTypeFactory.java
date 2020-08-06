@@ -19,6 +19,7 @@ import org.checkerframework.framework.type.AnnotatedTypeMirror;
 import org.checkerframework.framework.type.AnnotationClassLoader;
 import org.checkerframework.framework.type.DefaultAnnotatedTypeFormatter;
 import org.checkerframework.framework.type.QualifierHierarchy;
+import org.checkerframework.framework.type.ViewpointAdapter;
 import org.checkerframework.framework.type.treeannotator.ListTreeAnnotator;
 import org.checkerframework.framework.type.treeannotator.LiteralTreeAnnotator;
 import org.checkerframework.framework.type.treeannotator.PropagationTreeAnnotator;
@@ -240,6 +241,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
 
             // Update tops
             tops.remove(unitsRepUtils.RAWUNITSREP);
+            tops.remove(unitsRepUtils.RECEIVER_DEPENDANT_UNIT);
             tops.add(unitsRepUtils.TOP);
 
             // System.err.println(" === Typecheck ATF ");
@@ -309,16 +311,21 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                             + getAnnotationFormatter().formatAnnotationMirror(superAnno));
         }
     }
+    
+    @Override
+    protected ViewpointAdapter createViewpointAdapter() {
+        return new UnitsViewpointAdapter(this);
+    }
 
     @Override
     public TreeAnnotator createTreeAnnotator() {
         return new ListTreeAnnotator(
-                new UnitsTypecheckLiteralTreeAnnotator(), new UnitsPropagationTreeAnnotator());
+                new UnitsLiteralTreeAnnotator(), new UnitsPropagationTreeAnnotator());
     }
 
-    protected final class UnitsTypecheckLiteralTreeAnnotator extends LiteralTreeAnnotator {
+    protected final class UnitsLiteralTreeAnnotator extends LiteralTreeAnnotator {
         // Programmatically set the qualifier implicits
-        public UnitsTypecheckLiteralTreeAnnotator() {
+        public UnitsLiteralTreeAnnotator() {
             super(UnitsAnnotatedTypeFactory.this);
             // set BOTTOM as the literal qualifier for null literals
             addLiteralKind(LiteralKind.NULL, unitsRepUtils.BOTTOM);
