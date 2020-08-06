@@ -6,6 +6,8 @@ import units.qual.*;
 @SuppressWarnings("units")
 public class UnitsTools {
     // Static Constants
+	public static final @Dimensionless int dimensionless = 1;
+	
     public static final @g int g = 1;
     public static final @kg int kg = 1;
 

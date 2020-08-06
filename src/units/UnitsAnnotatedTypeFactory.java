@@ -286,6 +286,14 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
             if (AnnotationUtils.areSame(superAnno, unitsRepUtils.POLYUNIT)) {
                 return true;
             }
+            
+            // Case: @RDU shouldn't appear. throw error?
+            if (AnnotationUtils.areSame(subAnno, unitsRepUtils.RECEIVER_DEPENDANT_UNIT)) {
+                return isSubtype(unitsRepUtils.TOP, superAnno);
+            }
+            if (AnnotationUtils.areSame(superAnno, unitsRepUtils.RECEIVER_DEPENDANT_UNIT)) {
+                return true;
+            }
 
             // Case: @UnitsRep(x) <: @UnitsRep(y)
             if (AnnotationUtils.areSameByClass(subAnno, UnitsRep.class)
