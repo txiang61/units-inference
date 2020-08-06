@@ -136,8 +136,9 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
         // UnknownUnits if they want to use units
         // defs.addCheckedCodeDefault(unitsRepUtils.DIMENSIONLESS, TypeUseLocation.UPPER_BOUND);
         defs.addCheckedCodeDefault(
+                unitsRepUtils.DIMENSIONLESS, TypeUseLocation.IMPLICIT_UPPER_BOUND);
+        defs.addCheckedCodeDefault(
                 unitsRepUtils.DIMENSIONLESS, TypeUseLocation.EXPLICIT_UPPER_BOUND);
-        defs.addCheckedCodeDefault(unitsRepUtils.TOP, TypeUseLocation.IMPLICIT_UPPER_BOUND);
         // defaults for lower bounds is BOTTOM, individual bounds can be manually set
         defs.addCheckedCodeDefault(unitsRepUtils.BOTTOM, TypeUseLocation.LOWER_BOUND);
         // exceptions are always dimensionless
@@ -286,7 +287,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
             if (AnnotationUtils.areSame(superAnno, unitsRepUtils.POLYUNIT)) {
                 return true;
             }
-            
+
             // Case: @RDU shouldn't appear. throw error?
             if (AnnotationUtils.areSame(subAnno, unitsRepUtils.RECEIVER_DEPENDANT_UNIT)) {
                 return isSubtype(unitsRepUtils.TOP, superAnno);
@@ -319,7 +320,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                             + getAnnotationFormatter().formatAnnotationMirror(superAnno));
         }
     }
-    
+
     @Override
     protected ViewpointAdapter createViewpointAdapter() {
         return new UnitsViewpointAdapter(this);

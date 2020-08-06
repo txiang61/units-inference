@@ -500,7 +500,7 @@ public class UnitsRepresentationUtils {
         if (AnnotationUtils.areSameByClass(anno, PolyUnit.class)) {
             unit.setUnknownUnits(true);
         } else if (AnnotationUtils.areSameByClass(anno, RDU.class)) {
-        	unit.setUnknownUnits(true);
+            unit.setUnknownUnits(true);
         }
         // if it is a units internal annotation, generate the internal unit
         else if (AnnotationUtils.areSameByClass(anno, UnitsRep.class)) {

@@ -25,7 +25,7 @@ import units.representation.UnitsRepresentationUtils;
     "ApacheCommonsExec.astub",
     "DaikonExprPlumelib.astub", // for daikon expr
     "JavaUtilConcurrent.astub", // for ode4j, not yet annotated for hombucha
-//    "ExperimentsJavaAwtGeomAffineTransform.astub", // for imgscalr experiment
+    //    "ExperimentsJavaAwtGeomAffineTransform.astub", // for imgscalr experiment
     "JavaAWT.astub", // for josm
     "JavaAWTGeom.astub", // for josm, imgscalr
     "ExperimentsSunMiscUnsafe.astub", // for JLargeArrays

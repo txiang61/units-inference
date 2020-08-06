@@ -226,14 +226,10 @@ public class UnitsVisitor extends InferenceVisitor<UnitsChecker, BaseAnnotatedTy
                 if (!(atypeFactory.getQualifierHierarchy().isSubtype(lhsAM, rhsAM)
                         || atypeFactory.getQualifierHierarchy().isSubtype(rhsAM, lhsAM))) {
                     checker.reportError(
-                				binaryTree,
-                                "comparison.unit.mismatch",
-                                atypeFactory
-                                        .getAnnotationFormatter()
-                                        .formatAnnotationMirror(lhsAM),
-                                atypeFactory
-                                        .getAnnotationFormatter()
-                                        .formatAnnotationMirror(rhsAM));
+                            binaryTree,
+                            "comparison.unit.mismatch",
+                            atypeFactory.getAnnotationFormatter().formatAnnotationMirror(lhsAM),
+                            atypeFactory.getAnnotationFormatter().formatAnnotationMirror(rhsAM));
                 }
                 // if (!AnnotationUtils.areSame(lhsAM, rhsAM)) {
                 // }
