@@ -66,7 +66,7 @@ public class UnitsChecker extends BaseInferrableChecker {
 
     @Override
     public boolean withCombineConstraints() {
-        return true;
+        return false;
     }
 
     @Override
