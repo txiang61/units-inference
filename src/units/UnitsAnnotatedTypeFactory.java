@@ -20,6 +20,7 @@ import org.checkerframework.framework.type.AnnotationClassLoader;
 import org.checkerframework.framework.type.DefaultAnnotatedTypeFormatter;
 import org.checkerframework.framework.type.QualifierHierarchy;
 import org.checkerframework.framework.type.treeannotator.ListTreeAnnotator;
+import org.checkerframework.framework.type.treeannotator.LiteralTreeAnnotator;
 import org.checkerframework.framework.type.treeannotator.PropagationTreeAnnotator;
 import org.checkerframework.framework.type.treeannotator.TreeAnnotator;
 import org.checkerframework.framework.type.typeannotator.DefaultForTypeAnnotator;
@@ -111,7 +112,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
     @Override
     public boolean isSupportedQualifier(AnnotationMirror anno) {
         /*
-         * getQualifierHierarchy().getTypeQualifiers() contains PolyAll, PolyUnit, and the AMs of
+         * getQualifierHierarchy().getTypeQualifiers() contains PolyUnit, and the AMs of
          * Top and Bottom. We need to check all other instances of @UnitsRep AMs that are
          * supported qualifiers here.
          */
@@ -121,7 +122,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
         if (AnnotationUtils.areSameByClass(anno, UnitsRep.class)) {
             return unitsRepUtils.hasAllBaseUnits(anno);
         }
-        // Anno is PolyAll, PolyUnit
+        // Anno is PolyUnit
         return AnnotationUtils.containsSame(this.getQualifierHierarchy().getTypeQualifiers(), anno);
     }
 
@@ -276,7 +277,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                 return true;
             }
 
-            // Case: @PolyAll and @PolyUnit are treated as @UnknownUnits
+            // Case: @PolyUnit are treated as @UnknownUnits
             if (AnnotationUtils.areSame(subAnno, unitsRepUtils.POLYUNIT)) {
                 return isSubtype(unitsRepUtils.TOP, superAnno);
             }
@@ -315,10 +316,15 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                 new UnitsTypecheckLiteralTreeAnnotator(), new UnitsPropagationTreeAnnotator());
     }
 
-    protected final class UnitsTypecheckLiteralTreeAnnotator extends UnitsLiteralTreeAnnotator {
+    protected final class UnitsTypecheckLiteralTreeAnnotator extends LiteralTreeAnnotator {
         // Programmatically set the qualifier implicits
         public UnitsTypecheckLiteralTreeAnnotator() {
             super(UnitsAnnotatedTypeFactory.this);
+            // set BOTTOM as the literal qualifier for null literals
+            addLiteralKind(LiteralKind.NULL, unitsRepUtils.BOTTOM);
+            addLiteralKind(LiteralKind.STRING, unitsRepUtils.DIMENSIONLESS);
+            addLiteralKind(LiteralKind.CHAR, unitsRepUtils.DIMENSIONLESS);
+            addLiteralKind(LiteralKind.BOOLEAN, unitsRepUtils.DIMENSIONLESS);
             // in type checking mode, we also set dimensionless for the number literals
             addLiteralKind(LiteralKind.INT, unitsRepUtils.DIMENSIONLESS);
             addLiteralKind(LiteralKind.LONG, unitsRepUtils.DIMENSIONLESS);
