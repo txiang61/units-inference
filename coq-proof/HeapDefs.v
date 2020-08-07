@@ -1,7 +1,7 @@
-Require Import UnitsDefs.
-Require Import IDDefs.
-Require Import ValueDefs.
-Require Import MapsDefs.
+From PUnits Require Import UnitsDefs.
+From PUnits Require Import IDDefs.
+From PUnits Require Import ValueDefs.
+From PUnits Require Import MapsDefs.
 
 (* Heap is a map from IDs to pairs of its field type and value
 we use Coq's built in pair data structure
@@ -20,7 +20,7 @@ Definition Heap_Update (h : Heap) (f : ID) (Tf Tv : Unit) (z : nat) : Heap := Ma
 Definition Heap_Get (h : Heap) (f : ID) : option HeapValue := Map_Get id_beq h f.
 Definition Heap_Contains (h : Heap) (f : ID) : bool := Map_Contains id_beq h f.
 Definition Heap_IsSubMap (h1 h2 : Heap) : bool := Map_IsSubMap id_beq HeapValue_beq h1 h2.
-Hint Unfold Heap_Update.
+Hint Unfold Heap_Update : pUnitsHintDatabase.
 
 Theorem Heap_Get_Content_Eq :
   forall (h : Heap) (f : ID) (v1 v2 : option HeapValue),

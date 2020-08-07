@@ -4,7 +4,7 @@ Import List.ListNotations.
 Require Import Arith.
 Require Import Arith.EqNat.
 
-Require Import UnitsDefs.
+From PUnits Require Import UnitsDefs.
 
 (* Values, which are numbers that are labeled with a Unit *)
 Inductive Value : Type :=
@@ -58,7 +58,7 @@ Qed.
 
 Definition Value_beq v1 v2 :=
   if Value_eq_dec v1 v2 then true else false.
-Hint Unfold Value_beq.
+Hint Unfold Value_beq : pUnitsHintDatabase.
 
 Theorem Value_beq_refl : forall v, Value_beq v v = true.
 Proof.

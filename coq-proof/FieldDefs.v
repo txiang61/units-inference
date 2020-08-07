@@ -1,11 +1,15 @@
-Require Import TacticalLemmas.
-Require Import UnitsDefs.
-Require Import SubtypingDefs.
-Require Import IDDefs.
-Require Import ValueDefs.
-Require Import GammaDefs.
-Require Import HeapDefs.
-Require Import GammaHeapCorrespondence.
+Require Import Strings.String.
+Open Scope string_scope.
+Open Scope core_scope.
+
+From PUnits Require Import TacticalLemmas.
+From PUnits Require Import UnitsDefs.
+From PUnits Require Import SubtypingDefs.
+From PUnits Require Import IDDefs.
+From PUnits Require Import ValueDefs.
+From PUnits Require Import GammaDefs.
+From PUnits Require Import HeapDefs.
+From PUnits Require Import GammaHeapCorrespondence.
 
 (* ======================================================= *)
 Inductive Field_Declarations : Type :=
@@ -16,7 +20,7 @@ Tactic Notation "fds_cases" tactic(first) ident(c) :=
   [ Case_aux c "FD_Empty"
   | Case_aux c "FD_Decl"
   ].
-Hint Constructors Field_Declarations.
+Hint Constructors Field_Declarations : pUnitsHintDatabase.
 
 (* ======================================================= *)
 Reserved Notation "'fds:' g1 '|-' fds 'in' g2" (at level 40).
@@ -35,7 +39,7 @@ Tactic Notation "fds_has_type_cases" tactic(first) ident(c) :=
   [ Case_aux c "T_FD_Empty"
   | Case_aux c "T_FD"
   ].
-Hint Constructors fds_has_type.
+Hint Constructors fds_has_type : pUnitsHintDatabase.
 
 (* ======================================================= *)
 Reserved Notation " fds1 'fds==>' fds2 " (at level 8).
@@ -47,7 +51,7 @@ Tactic Notation "fds_small_step_cases" tactic(first) ident(c) :=
   first;
   [ Case_aux c "ST_FD"
   ].
-Hint Constructors fds_small_step.
+Hint Constructors fds_small_step : pUnitsHintDatabase.
 
 (* ======================================================= *)
 (* step is deterministic *)

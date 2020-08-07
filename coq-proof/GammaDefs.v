@@ -1,7 +1,8 @@
 Require Import Bool.
-Require Import UnitsDefs.
-Require Import IDDefs.
-Require Import MapsDefs.
+
+From PUnits Require Import UnitsDefs.
+From PUnits Require Import IDDefs.
+From PUnits Require Import MapsDefs.
 
 (* Gamma is a map from IDs to Types *)
 
@@ -11,7 +12,7 @@ Definition Gamma_Extend (g : Gamma) (f : ID) (T : Unit) : Gamma := Map_Add id_be
 Definition Gamma_Get (g : Gamma) (f : ID) : option Unit := Map_Get id_beq g f.
 Definition Gamma_Contains (g : Gamma) (f : ID) : bool := Map_Contains id_beq g f.
 Definition Gamma_IsSTbMap (g1 g2 : Gamma) : bool := Map_IsSubMap id_beq unit_beq g1 g2.
-Hint Unfold Gamma_Extend.
+Hint Unfold Gamma_Extend : pUnitsHintDatabase.
 
 Theorem Gamma_Get_Content_Eq :
   forall (g : Gamma) (f : ID) (T1 T2 : Unit),

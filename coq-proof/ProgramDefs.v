@@ -4,21 +4,22 @@ Import List.ListNotations.
 Require Import Lists.ListSet.
 Require Import Arith.
 Require Import Arith.EqNat.
-Require Import Strings.String. Open Scope string_scope.
+Require Import Strings.String.
+Open Scope string_scope.
 Open Scope core_scope.
 
-Require Import TacticalLemmas.
-Require Import UnitsDefs.
-Require Import SubtypingDefs.
-Require Import UnitsArithmetics.
-Require Import IDDefs.
-Require Import ValueDefs.
-Require Import GammaDefs.
-Require Import HeapDefs.
-Require Import GammaHeapCorrespondence.
-Require Import FieldDefs.
-Require Import ExpressionDefs.
-Require Import StatementDefs.
+From PUnits Require Import TacticalLemmas.
+From PUnits Require Import UnitsDefs.
+From PUnits Require Import SubtypingDefs.
+From PUnits Require Import UnitsArithmetics.
+From PUnits Require Import IDDefs.
+From PUnits Require Import ValueDefs.
+From PUnits Require Import GammaDefs.
+From PUnits Require Import HeapDefs.
+From PUnits Require Import GammaHeapCorrespondence.
+From PUnits Require Import FieldDefs.
+From PUnits Require Import ExpressionDefs.
+From PUnits Require Import StatementDefs.
 
 (* ======================================================= *)
 Inductive Program : Type :=
@@ -27,7 +28,7 @@ Tactic Notation "prog_cases" tactic(first) ident(c) :=
   first;
   [ Case_aux c "program"
   ].
-Hint Constructors Program.
+Hint Constructors Program : pUnitsHintDatabase.
 
 Notation "{ fds s }" := (program fds s) (at level 1).
 
@@ -43,7 +44,7 @@ Tactic Notation "prog_has_type_cases" tactic(first) ident(c) :=
   first;
   [ Case_aux c "T_Program"
   ].
-Hint Constructors prog_has_type.
+Hint Constructors prog_has_type : pUnitsHintDatabase.
 
 (* ======================================================= *)
 Reserved Notation " p1 'prog==>' p2 " (at level 8).
@@ -60,7 +61,7 @@ Tactic Notation "prog_small_step_cases" tactic(first) ident(c) :=
   [ Case_aux c "ST_PROG_FieldDefs_Step"
   | Case_aux c "ST_PROG_Statementss_Step"
   ].
-Hint Constructors prog_small_step.
+Hint Constructors prog_small_step : pUnitsHintDatabase.
 
 (* ======================================================= *)
 (* step is deterministic *)

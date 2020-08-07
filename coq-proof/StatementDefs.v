@@ -4,18 +4,19 @@ Import List.ListNotations.
 Require Import Lists.ListSet.
 Require Import Arith.
 Require Import Arith.EqNat.
-Require Import Strings.String. Open Scope string_scope.
+Require Import Strings.String.
+Open Scope string_scope.
 Open Scope core_scope.
 
-Require Import TacticalLemmas.
-Require Import UnitsDefs.
-Require Import SubtypingDefs.
-Require Import IDDefs.
-Require Import ValueDefs.
-Require Import GammaDefs.
-Require Import HeapDefs.
-Require Import GammaHeapCorrespondence.
-Require Import ExpressionDefs.
+From PUnits Require Import TacticalLemmas.
+From PUnits Require Import UnitsDefs.
+From PUnits Require Import SubtypingDefs.
+From PUnits Require Import IDDefs.
+From PUnits Require Import ValueDefs.
+From PUnits Require Import GammaDefs.
+From PUnits Require Import HeapDefs.
+From PUnits Require Import GammaHeapCorrespondence.
+From PUnits Require Import ExpressionDefs.
 
 (* ======================================================= *)
 Inductive Statements : Type :=
@@ -26,7 +27,7 @@ Tactic Notation "stmt_cases" tactic(first) ident(c) :=
   [ Case_aux c "STMT_Empty"
   | Case_aux c "STMT_Assign"
   ].
-Hint Constructors Statements.
+Hint Constructors Statements : pUnitsHintDatabase.
 
 (* ======================================================= *)
 Reserved Notation "'stmt:' g '|-' s " (at level 40).
@@ -46,7 +47,7 @@ Tactic Notation "stmt_has_type_cases" tactic(first) ident(c) :=
   [ Case_aux c "T_STMT_Empty"
   | Case_aux c "T_STMT_Assign"
   ].
-Hint Constructors stmt_has_type.
+Hint Constructors stmt_has_type : pUnitsHintDatabase.
 
 (* ======================================================= *)
 
@@ -65,7 +66,7 @@ Tactic Notation "stmt_small_step_cases" tactic(first) ident(c) :=
   [ Case_aux c "ST_STMT_Assign_Val"
   | Case_aux c "ST_STMT_Assign_Exp"
   ].
-Hint Constructors stmt_small_step.
+Hint Constructors stmt_small_step : pUnitsHintDatabase.
 
 (* ======================================================= *)
 (* step is deterministic *)
