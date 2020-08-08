@@ -35,22 +35,24 @@ function compile() {
 }
 
 compile TacticalLemmas.v
-compile IDDefs.v
-compile MapsDefs.v
+compile Maps.v
 
-compile UnitsDefs.v
+compile Units.v
+compile LabeledLiterals.v
 
-compile ValueDefs.v
-compile GammaDefs.v
-compile HeapDefs.v
-compile SubtypingDefs.v
-compile GammaHeapCorrespondence.v
+compile IDs.v
+
+compile Gamma.v
+compile StackFrame.v
+
+compile Subtyping.v
+compile GammaStackFrameCorrespondence.v
 
 compile UnitsArithmetics.v
 
-compile FieldDefs.v
-compile ExpressionDefs.v
-compile StatementDefs.v
-compile ProgramDefs.v
+compile VarDecls.v
+compile Expressions.v
+compile Statements.v
+compile Program.v
 
 echo "Compilation complete."
