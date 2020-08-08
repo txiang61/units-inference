@@ -1,6 +1,6 @@
 #!/bin/bash
 
-update-alternatives --config java <<< 2
+: $(update-alternatives --config java <<< 2)
 
 echo "Rebuilding CF"
 (cd ../checker-framework && git pull && ./gradlew assemble)

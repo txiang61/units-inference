@@ -3,15 +3,17 @@
 echo "This script compiles test project daikon"
 
 WORKING_DIR=$(cd $(dirname "$0") && pwd)
-export CHECKERFRAMEWORK=/home/jsr308/checker-framework
 
-## Fetch checker-framework-inference
+## Fetch daikon projects
 if [ -d $WORKING_DIR/daikon ] ; then
-    (cd $WORKING_DIR/daikon && git pull)
+    (cd $WORKING_DIR/daikon)
 else
-    BRANCH=master
-    echo "Cloning from branch" $BRANCH
-    (cd $WORKING_DIR && git clone -b $BRANCH --depth 1 https://github.com/txiang61/daikon.git)
+    (cd $WORKING_DIR && git clone https://github.com/txiang61-benchmarks/daikon.git)
 fi
 
+echo "Compile PUnits"
+: $(update-alternatives --config java <<< 2)
+(cd $PUNITS && ./gradlew assemble)
+
+echo "Run type check on Daikon"
 (cd $WORKING_DIR/daikon/java && make check-units)

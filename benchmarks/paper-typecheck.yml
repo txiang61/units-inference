@@ -23,7 +23,7 @@ projects:
   # Unsat
   JLargeArrays:
     # giturl: https://gitlab.com/ICM-VisLab/JLargeArrays.git # this version would be nice to run on in the future, currently has typecheck errors
-    giturl: https://github.com/jyluo-benchmarks/JLargeArrays.git
+    giturl: https://github.com/txiang61-benchmarks/JLargeArrays.git
     build: mvn -B -DskipTests compile
     clean: mvn -B clean
 

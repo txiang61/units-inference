@@ -35,7 +35,7 @@ CORPUSFILE=$WORKING_DIR/$PROJECTNAME.yml
 ./clean-up-projects.sh $WORKING_DIR/$PROJECTNAME
 
 # Build jar dependency
-update-alternatives --config java <<< 1
+: $(update-alternatives --config java <<< 1)
 (cd $UI && ./gradlew jar)
 
 if [ $OPTIMIZING_MODE = "true" ] && [ $PARALLEL = "true" ]; then
