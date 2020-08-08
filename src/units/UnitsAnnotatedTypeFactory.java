@@ -322,7 +322,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
 
     @Override
     protected ViewpointAdapter createViewpointAdapter() {
-        return new UnitsViewpointAdapter(this);
+        return checker.hasOption(UnitsChecker.DISABLE_RDU) ? super.createViewpointAdapter() : new UnitsViewpointAdapter(this);
     }
 
     @Override
