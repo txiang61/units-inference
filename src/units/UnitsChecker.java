@@ -10,7 +10,6 @@ import java.util.Set;
 import org.checkerframework.common.basetype.BaseAnnotatedTypeFactory;
 import org.checkerframework.framework.qual.StubFiles;
 import org.checkerframework.framework.source.SupportedOptions;
-
 import units.representation.UnitsRepresentationUtils;
 
 @StubFiles({
@@ -32,14 +31,12 @@ import units.representation.UnitsRepresentationUtils;
     "JavaAWTGeom.astub", // for josm, imgscalr
     "ExperimentsSunMiscUnsafe.astub", // for JLargeArrays
 })
-@SupportedOptions({
-	UnitsChecker.DISABLE_RDU
-})
+@SupportedOptions({UnitsChecker.DISABLE_RDU})
 public class UnitsChecker extends BaseInferrableChecker {
 
-	/** Command-line option that enables receiver dependent unit. */
+    /** Command-line option that enables receiver dependent unit. */
     public static final String DISABLE_RDU = "disableRDU";
-    
+
     @Override
     public void initChecker() {
         super.initChecker();
