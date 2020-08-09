@@ -42,4 +42,4 @@ else
     exit 1
 fi
 
-(cd $DAIKON/java && make check-units)
+(cd $DAIKON/java && time make check-units)
